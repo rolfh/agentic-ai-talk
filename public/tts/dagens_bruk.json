@@ -1,0 +1,52 @@
+[
+  {
+    "start": 0.0,
+    "end": 2.44,
+    "text": "Alle har brukt AI via en nettside."
+  },
+  {
+    "start": 2.94,
+    "end": 5.32,
+    "text": "En nettside vet bare det du putter inn i den."
+  },
+  {
+    "start": 6.12,
+    "end": 12.64,
+    "text": "På design og utvikling kjører vi agenter som Claude Code, GitHub Copilot og Google Antigravity."
+  },
+  {
+    "start": 13.54,
+    "end": 17.44,
+    "text": "Agentene kjører lokalt på maskina di for å få tilgang til å kjøre verktøy."
+  },
+  {
+    "start": 18.04,
+    "end": 22.68,
+    "text": "Den kan i teorien gjøre hva som helst, fra å gjøre oppgaver for deg, til å installere virus."
+  },
+  {
+    "start": 23.44,
+    "end": 28.24,
+    "text": "Som standard må man godkjenne at agenten får lov til å lese og skrive til filsystemet,"
+  },
+  {
+    "start": 28.54,
+    "end": 29.74,
+    "text": "gjøre søk på nettet, etc."
+  },
+  {
+    "start": 30.56,
+    "end": 34.76,
+    "text": "Det finnes en auto-modus for å kun spørre om potensielt farlige handlinger."
+  },
+  {
+    "start": 35.82,
+    "end": 40.62,
+    "text": "At en agent er lokal betyr ikke nødvendigvis at selve modellen kjører lokalt,"
+  },
+  {
+    "start": 40.92,
+    "end": 43.28,
+    "text": "men at den gis tilgang til å kjøre verktøy lokalt."
+  }
+]

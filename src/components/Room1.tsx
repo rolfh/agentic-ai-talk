@@ -107,8 +107,8 @@ export const Room1 = () => {
       <AudioZone
         position={[0, 1.5, 0]}
         size={[7, 4, 7]}
-        audioUrl="/tts/Generated Audio June 22, 2026 - 1_16PM Da kjernekraft kom -good .mp3"
-        subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_16PM Da kjernekraft kom -good .json"
+        audioUrl="/tts/kjernekraft.mp3"
+        subtitleUrl="/tts/kjernekraft.json"
       />
 
       {/* Lighting */}

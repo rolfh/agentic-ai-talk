@@ -1,0 +1,67 @@
+[
+  {
+    "start": 0.0,
+    "end": 2.4,
+    "text": "Hva kan en agent gjøre for deg?"
+  },
+  {
+    "start": 3.5,
+    "end": 7.18,
+    "text": "Sett at du har mange filer som inneholder data du ønsker."
+  },
+  {
+    "start": 7.94,
+    "end": 12.7,
+    "text": "For å få tak i dataen må den letes fram, og formateres rett."
+  },
+  {
+    "start": 13.24,
+    "end": 16.24,
+    "text": "En utvikler ville skrevet litt kode for å løse det,"
+  },
+  {
+    "start": 16.52,
+    "end": 20.6,
+    "text": "men du har sikkert aldri installert Node eller Python,"
+  },
+  {
+    "start": 21.06,
+    "end": 23.54,
+    "text": "så å be ChatGPT om å skrive kode for deg"
+  },
+  {
+    "start": 23.86,
+    "end": 25.52,
+    "text": "har kanskje ikke virket som et alternativ."
+  },
+  {
+    "start": 26.52,
+    "end": 30.0,
+    "text": "Men en agent kan ta kontroll på PC-en din,"
+  },
+  {
+    "start": 30.0,
+    "end": 33.44,
+    "text": "og installere det du trenger, skrive koden,"
+  },
+  {
+    "start": 34.0,
+    "end": 37.14,
+    "text": "kjøre koden, og verifisere at det ble rett."
+  },
+  {
+    "start": 37.84,
+    "end": 41.519999999999996,
+    "text": "Den kan finne ut alt den trenger å vite om PC-en din, filene dine,"
+  },
+  {
+    "start": 42.4,
+    "end": 46.08,
+    "text": "den har tilgang på nettet og potensialet for full tilgang."
+  },
+  {
+    "start": 47.02,
+    "end": 50.9,
+    "text": "Agenten kan kjøre i gang en nettleser og gjøre oppgaver der også."
+  }
+]

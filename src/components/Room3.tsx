@@ -99,8 +99,8 @@ export const Room3 = () => {
         <AudioZone
           position={[0, 1, 0]}
           size={[4, 3.5, 5]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_20PM hva kan en agent gjøre.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_20PM hva kan en agent gjøre.json"
+          audioUrl="/tts/hva_kan_agent_gjoere.mp3"
+          subtitleUrl="/tts/hva_kan_agent_gjoere.json"
         />
       </group>
 
@@ -134,47 +134,12 @@ export const Room3 = () => {
         <AudioZone
           position={[0, 1, 0]}
           size={[4, 3.5, 5]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_21PM å få en agent til å skrive kode.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_21PM å få en agent til å skrive kode.json"
+          audioUrl="/tts/tusen_problemer.mp3"
+          subtitleUrl="/tts/tusen_problemer.json"
         />
       </group>
 
-      {/* ----------------- SUB-STATION 3: Github Backup Node (Back Center) ----------------- */}
-      <group position={[0, 0, 6]}>
-        {/* Backup server / Git node */}
-        <RigidBody type="fixed" position={[0, 1.5, 0]}>
-          <mesh castShadow receiveShadow>
-            <cylinderGeometry args={[0.8, 0.9, 3.0, 16]} />
-            <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.05} />
-          </mesh>
-          {/* Glowing circles */}
-          <mesh position={[0, 0.5, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.82, 0.02, 8, 32]} />
-            <meshBasicMaterial color="#3080ff" toneMapped={false} />
-          </mesh>
-          <mesh position={[0, -0.5, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.82, 0.02, 8, 32]} />
-            <meshBasicMaterial color="#3080ff" toneMapped={false} />
-          </mesh>
-        </RigidBody>
-        <Text
-          position={[0, 3.3, 0]}
-          fontSize={0.25}
-          color="#3080ff"
-          material-toneMapped={false}
-        >
-          Backup & Github
-        </Text>
 
-        <pointLight position={[0, 1.5, 0]} intensity={1.5} color="#3080ff" distance={4} />
-
-        <AudioZone
-          position={[0, 1, -1]}
-          size={[4, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_22PM - Som utviklere bruker vi Git.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_22PM - Som utviklere bruker vi Git.json"
-        />
-      </group>
 
       {/* ----------------- SUB-STATION 4: MCP Terminal (Right Front) ----------------- */}
       <group position={[7, 0, -5]}>
@@ -219,8 +184,8 @@ export const Room3 = () => {
         <AudioZone
           position={[0, 1, 1]}
           size={[4, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_22PM - Mange programmer som kjører på maskina di har støtte for MCP.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_22PM - Mange programmer som kjører på maskina di har støtte for MCP.json"
+          audioUrl="/tts/mcp_mange_programmer.mp3"
+          subtitleUrl="/tts/mcp_mange_programmer.json"
         />
       </group>
 
@@ -262,8 +227,8 @@ export const Room3 = () => {
         <AudioZone
           position={[0, 1, -1]}
           size={[4, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_25PM - MCP servere finnes for Chrome og Firefox, Photoshop.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_25PM - MCP servere finnes for Chrome og Firefox, Photoshop.json"
+          audioUrl="/tts/mcp_servere.mp3"
+          subtitleUrl="/tts/mcp_servere.json"
         />
       </group>
 

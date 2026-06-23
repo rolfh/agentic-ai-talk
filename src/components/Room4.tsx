@@ -1,17 +1,18 @@
 import { RigidBody } from "@react-three/rapier";
-import { Text } from "@react-three/drei";
+import { Text, useTexture } from "@react-three/drei";
 import { AudioZone } from "./AudioZone";
 
 export const Room4 = () => {
-  const steps = [
-    "1. UTFORSK",
-    "2. DEFINER",
-    "3. PLANLEGG",
-    "4. REVIDER",
-    "5. KJØR",
-    "6. VERIFISER",
-    "7. FIKS"
-  ];
+  const cardNames = ["utforsk", "definer", "planlegg", "revider", "kjør", "verifiser", "fiks"];
+  
+  // Load textures for the front and back of each card
+  const textures = useTexture(
+    cardNames.reduce((acc, name) => {
+      acc[`${name}_f`] = `/cards/${name}-f.png`;
+      acc[`${name}_b`] = `/cards/${name}-b.png`;
+      return acc;
+    }, {} as Record<string, string>)
+  );
 
   return (
     <group>
@@ -92,14 +93,14 @@ export const Room4 = () => {
         <AudioZone
           position={[0, 1, 0]}
           size={[6, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_28PM - Hvordan prompte en agent.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_28PM - Hvordan prompte en agent.json"
+          audioUrl="/tts/hvordan_prompte.mp3"
+          subtitleUrl="/tts/hvordan_prompte.json"
         />
       </group>
 
       {/* ----------------- SUB-STATION 2: The 7 Playing Cards Arc (Center-Front) ----------------- */}
       <group position={[0, 0, -2]}>
-        {steps.map((label, idx) => {
+        {cardNames.map((name, idx) => {
           // Arrange in an arc
           const angle = (idx - 3) * 0.4;
           const radius = 6;
@@ -107,31 +108,34 @@ export const Room4 = () => {
           const z = radius * Math.cos(angle) - 4;
           const rotY = angle;
 
+          const frontTex = textures[`${name}_f`];
+          const backTex = textures[`${name}_b`];
+
           return (
-            <group key={label} position={[x, 1.2, z]} rotation={[0, rotY, 0]}>
+            <group key={name} position={[x, 1.2, z]} rotation={[0, rotY, 0]}>
               {/* Giant Card Shape */}
               <RigidBody type="fixed" colliders="cuboid">
+                {/* Thin middle card body */}
                 <mesh castShadow receiveShadow>
-                  <boxGeometry args={[1.2, 2.0, 0.05]} />
-                  <meshStandardMaterial color="#fff" roughness={0.1} metalness={0.1} />
+                  <boxGeometry args={[1.2, 1.8, 0.04]} />
+                  <meshStandardMaterial color="#1e293b" roughness={0.5} metalness={0.5} />
                 </mesh>
-                {/* Golden Border */}
-                <mesh position={[0, 0, 0.026]}>
-                  <boxGeometry args={[1.22, 2.02, 0.01]} />
-                  <meshStandardMaterial color="#eab308" emissive="#eab308" emissiveIntensity={0.2} roughness={0.2} />
+                {/* Front face plane displaying front image */}
+                <mesh position={[0, 0, 0.021]} castShadow>
+                  <planeGeometry args={[1.2, 1.8]} />
+                  <meshStandardMaterial map={frontTex} roughness={0.2} metalness={0.1} />
+                </mesh>
+                {/* Back face plane displaying back image */}
+                <mesh position={[0, 0, -0.021]} rotation={[0, Math.PI, 0]} castShadow>
+                  <planeGeometry args={[1.2, 1.8]} />
+                  <meshStandardMaterial map={backTex} roughness={0.2} metalness={0.1} />
+                </mesh>
+                {/* Golden/Yellow Card border outline frame */}
+                <mesh position={[0, 0, 0]}>
+                  <boxGeometry args={[1.22, 1.82, 0.042]} />
+                  <meshStandardMaterial color="#ffff30" emissive="#ffff30" emissiveIntensity={0.15} roughness={0.3} wireframe />
                 </mesh>
               </RigidBody>
-              {/* Text on Card */}
-              <Text
-                position={[0, 0, 0.035]}
-                fontSize={0.12}
-                color="#000"
-                fontWeight="bold"
-                maxWidth={1.0}
-                textAlign="center"
-              >
-                {label}
-              </Text>
             </group>
           );
         })}
@@ -140,8 +144,8 @@ export const Room4 = () => {
         <AudioZone
           position={[0, 1, -2]}
           size={[8, 3.5, 5]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_30PM - Her er en god fremgangsmåte.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_30PM - Her er en god fremgangsmåte.json"
+          audioUrl="/tts/fremgangsmaate.mp3"
+          subtitleUrl="/tts/fremgangsmaate.json"
         />
       </group>
 
@@ -172,7 +176,7 @@ export const Room4 = () => {
             maxWidth={3.2}
             textAlign="left"
           >
-            # Globale Føringer\n• Tone of voice: Profesjonell & Hjelpsom\n• Kodestil: Ren TypeScript, ingen placeholder-kode\n• Verktøybruk: Forespør samtykke før skriving av filer.\n• Backup: Gjør git-commits jevnlig.
+            {"# Globale Føringer\n• Tone of voice: Profesjonell & Hjelpsom\n• Kodestil: Ren TypeScript, ingen placeholder-kode\n• Verktøybruk: Forespør samtykke før skriving av filer.\n• Organisering: Hold orden på prosjektspecs."}
           </Text>
         </RigidBody>
 
@@ -181,8 +185,8 @@ export const Room4 = () => {
         <AudioZone
           position={[-1, 1, 0]}
           size={[4, 3.5, 5]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_31PM - AGENTS.md.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_31PM - AGENTS.md.json"
+          audioUrl="/tts/agents_md.mp3"
+          subtitleUrl="/tts/agents_md.json"
         />
       </group>
 
@@ -207,7 +211,7 @@ export const Room4 = () => {
           textAlign="left"
           rotation={[0, -Math.PI / 2, 0]}
         >
-          [ GENERELLE REGLER ]\n- Alltid ha en klar og tydelig plan\n- Foretrekk inline kommentarer for kompleks kode\n- Unngå placeholders i kodefiler\n- Bruk standard HTML5 tagger
+          {"[ GENERELLE REGLER ]\n- Alltid ha en klar og tydelig plan\n- Foretrekk inline kommentarer for kompleks kode\n- Unngå placeholders i kodefiler\n- Bruk standard HTML5 tagger"}
         </Text>
 
         <Text
@@ -222,8 +226,8 @@ export const Room4 = () => {
         <AudioZone
           position={[1, 1, 0]}
           size={[4, 3.5, 5]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_33PM - Noen ting gjelder for alle oppgaver.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_33PM - Noen ting gjelder for alle oppgaver.json"
+          audioUrl="/tts/noen_ting_gjelder_alle.mp3"
+          subtitleUrl="/tts/noen_ting_gjelder_alle.json"
         />
       </group>
 
@@ -254,8 +258,8 @@ export const Room4 = () => {
         <AudioZone
           position={[0, 1, -1]}
           size={[4, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_37PM - For å styre hvordan agenter oppfører seg.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_37PM - For å styre hvordan agenter oppfører seg.json"
+          audioUrl="/tts/styre_agenter.mp3"
+          subtitleUrl="/tts/styre_agenter.json"
         />
       </group>
 

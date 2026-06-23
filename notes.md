@@ -34,9 +34,6 @@ Sett at du har mange filer som inneholder data du ønsker. For å få tak i data
 **1000 problemer**  
 Å få en agent til å skrive kode er en måte å løse tusen problemer. Alt du typisk gjør på en PC kan en agent gjøre med kode, hvis du gir den tilgang. 
 
-**Github**  
-Som utviklere bruker vi Git og Github. Det gir backup, en grundig logg, og samarbeid for kode. Hvis du får en agent til å skrive kode du vil ta vare på og kjøre flere ganger, vurder å lage en gratis Github konto og be agenten oppdatere koden der. 
-
 **Rom: ??**
 
 **MCP**  

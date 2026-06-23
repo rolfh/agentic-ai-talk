@@ -107,8 +107,8 @@ export const Room2 = () => {
         <AudioZone
           position={[0, 1, 1.5]}
           size={[5, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_09PM alle har brukt ai via en nettside - good.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_09PM alle har brukt ai via en nettside - good.json"
+          audioUrl="/tts/dagens_bruk.mp3"
+          subtitleUrl="/tts/dagens_bruk.json"
         />
       </group>
 
@@ -150,8 +150,8 @@ export const Room2 = () => {
         <AudioZone
           position={[0, 1, 0]}
           size={[4, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_12PM Claude Desktop har en modus - good.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_12PM Claude Desktop har en modus - good.json"
+          audioUrl="/tts/claude_cowork.mp3"
+          subtitleUrl="/tts/claude_cowork.json"
         />
       </group>
 
@@ -199,8 +199,8 @@ export const Room2 = () => {
         <AudioZone
           position={[0, 1, 1.0]}
           size={[4, 3.5, 4]}
-          audioUrl="/tts/Generated Audio June 22, 2026 - 1_14PM Agenten kjører typisk - good.mp3"
-          subtitleUrl="/tts/Generated Audio June 22, 2026 - 1_14PM Agenten kjører typisk - good.json"
+          audioUrl="/tts/terminal_vs_desktop.mp3"
+          subtitleUrl="/tts/terminal_vs_desktop.json"
         />
       </group>
 

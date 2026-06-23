@@ -1,0 +1,17 @@
+[
+  {
+    "start": 0.0,
+    "end": 6.92,
+    "text": "Mange programmer som kjører på maskina di har støtte for MCP (Model Context Protocol)."
+  },
+  {
+    "start": 7.46,
+    "end": 10.66,
+    "text": "Det er en måte å lage en 2-veis kommunikasjon til agenten."
+  },
+  {
+    "start": 11.28,
+    "end": 16.16,
+    "text": "Agenten leser tilstanden til et program og vet hvilke funksjoner som er mulig."
+  }
+]

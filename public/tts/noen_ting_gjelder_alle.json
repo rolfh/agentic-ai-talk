@@ -1,0 +1,22 @@
+[
+  {
+    "start": 0.0,
+    "end": 2.68,
+    "text": "Noen ting gjelder for alle oppgaver."
+  },
+  {
+    "start": 3.36,
+    "end": 5.62,
+    "text": "Hvordan prosjektet du jobber med ser ut,"
+  },
+  {
+    "start": 6.04,
+    "end": 8.88,
+    "text": "hvordan du ønsker at koden skal skrives, etc."
+  },
+  {
+    "start": 9.88,
+    "end": 16.24,
+    "text": "Agents.md er en tekstfil med instrukser som leses ved oppstart av alle agenter."
+  }
+]

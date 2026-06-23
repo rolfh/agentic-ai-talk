@@ -1,0 +1,32 @@
+[
+  {
+    "start": 0.0,
+    "end": 7.9,
+    "text": "For å styre hvordan agenter oppfører seg, skiller vi mellom globale innstillinger og oppgavespesifikke ferdigheter:"
+  },
+  {
+    "start": 8.96,
+    "end": 14.64,
+    "text": "Agents.md inneholder faste føringer som leses hver gang agenten starter,"
+  },
+  {
+    "start": 15.08,
+    "end": 19.54,
+    "text": "for eksempel prosjektoversikt, kodestil eller tone-of-voice."
+  },
+  {
+    "start": 20.26,
+    "end": 23.74,
+    "text": "Dette er agentens \"grunnmur\" som gjelder for alt arbeid."
+  },
+  {
+    "start": 25.26,
+    "end": 32.46,
+    "text": "Skills er skreddersydde instrukser for spesifikke oppgaver (som f.eks. \"Facebook Ad Recipe\")."
+  },
+  {
+    "start": 33.4,
+    "end": 42.6,
+    "text": "En Skill aktiveres kun når du spesifikt ber om det, noe som holder agenten fokusert på den aktuelle oppgaven uten unødig støy."
+  }
+]
