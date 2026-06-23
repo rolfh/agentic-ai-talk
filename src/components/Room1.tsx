@@ -1,6 +1,7 @@
 import { RigidBody } from "@react-three/rapier";
 import { Text } from "@react-three/drei";
 import { AudioZone } from "./AudioZone";
+import { Portal } from "./Portal";
 
 
 export const Room1 = () => {
@@ -9,52 +10,52 @@ export const Room1 = () => {
       {/* Floor */}
       <RigidBody type="fixed" position={[0, -0.1, 0]}>
         <mesh receiveShadow>
-          <boxGeometry args={[20, 0.2, 20]} />
+          <boxGeometry args={[30, 0.2, 30]} />
           <meshStandardMaterial color="#0f0f12" roughness={0.8} metalness={0.2} />
         </mesh>
       </RigidBody>
 
       {/* Walls */}
-      <RigidBody type="fixed" position={[0, 3, -10]}>
+      <RigidBody type="fixed" position={[0, 3, -15]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[20, 6, 0.4]} />
+          <boxGeometry args={[30, 6, 0.4]} />
           <meshStandardMaterial color="#1a1a24" roughness={0.6} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 3, 10]}>
+      <RigidBody type="fixed" position={[0, 3, 15]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[20, 6, 0.4]} />
+          <boxGeometry args={[30, 6, 0.4]} />
           <meshStandardMaterial color="#1a1a24" roughness={0.6} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[-10, 3, 0]}>
+      <RigidBody type="fixed" position={[-15, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 20]} />
+          <boxGeometry args={[0.4, 6, 30]} />
           <meshStandardMaterial color="#1a1a24" roughness={0.6} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[10, 3, 0]}>
+      <RigidBody type="fixed" position={[15, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 20]} />
+          <boxGeometry args={[0.4, 6, 30]} />
           <meshStandardMaterial color="#1a1a24" roughness={0.6} metalness={0.4} />
         </mesh>
       </RigidBody>
 
       {/* Ceiling Neon Border */}
-      <mesh position={[0, 5.95, -9.75]}>
-        <boxGeometry args={[20, 0.08, 0.08]} />
+      <mesh position={[0, 5.95, -14.75]}>
+        <boxGeometry args={[30, 0.08, 0.08]} />
         <meshBasicMaterial color="#ff2a44" toneMapped={false} />
       </mesh>
-      <mesh position={[0, 5.95, 9.75]}>
-        <boxGeometry args={[20, 0.08, 0.08]} />
+      <mesh position={[0, 5.95, 14.75]}>
+        <boxGeometry args={[30, 0.08, 0.08]} />
         <meshBasicMaterial color="#ff2a44" toneMapped={false} />
       </mesh>
-      <mesh position={[-9.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[20, 0.08, 0.08]} />
+      <mesh position={[-14.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[30, 0.08, 0.08]} />
         <meshBasicMaterial color="#ff2a44" toneMapped={false} />
       </mesh>
-      <mesh position={[9.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[20, 0.08, 0.08]} />
+      <mesh position={[14.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[30, 0.08, 0.08]} />
         <meshBasicMaterial color="#ff2a44" toneMapped={false} />
       </mesh>
 
@@ -106,7 +107,7 @@ export const Room1 = () => {
       {/* Players triggers it when they walk within a 7x7x7 meter box in the center of the room */}
       <AudioZone
         position={[0, 1.5, 0]}
-        size={[7, 4, 7]}
+        size={[12, 4, 12]}
         audioUrl="/tts/kjernekraft.mp3"
         subtitleUrl="/tts/kjernekraft.json"
       />
@@ -115,6 +116,9 @@ export const Room1 = () => {
       <ambientLight intensity={0.1} />
       <directionalLight position={[2, 10, 2]} intensity={0.5} castShadow />
       <spotLight position={[0, 8, 0]} angle={0.5} penumbra={1} intensity={2.5} castShadow color="#ffaaaa" />
+
+      {/* Portal to Room 2 */}
+      <Portal position={[0, 0, -14.5]} room="room2" label="Til Rom 2: Agenten i Arbeid" color="#10ff70" />
     </group>
   );
 };

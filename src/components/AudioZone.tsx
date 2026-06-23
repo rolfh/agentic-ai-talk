@@ -116,14 +116,25 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
   const halfExtents = [size[0] / 2, size[1] / 2, size[2] / 2] as [number, number, number];
 
   return (
-    <RigidBody type="fixed">
-      <CuboidCollider
-        args={halfExtents}
-        position={position}
-        sensor
-        onIntersectionEnter={handleEnter}
-        onIntersectionExit={handleExit}
-      />
-    </RigidBody>
+    <group>
+      <RigidBody type="fixed">
+        <CuboidCollider
+          args={halfExtents}
+          position={position}
+          sensor
+          onIntersectionEnter={handleEnter}
+          onIntersectionExit={handleExit}
+        />
+      </RigidBody>
+      {/* Visual ground marker for the AudioZone bounds */}
+      <mesh position={[position[0], 0.05, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[size[0], size[2]]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.03} depthWrite={false} />
+      </mesh>
+      <mesh position={[position[0], 0.06, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[size[0], size[2]]} />
+        <meshBasicMaterial color="#aaaaaa" transparent opacity={0.15} wireframe depthWrite={false} />
+      </mesh>
+    </group>
   );
 };

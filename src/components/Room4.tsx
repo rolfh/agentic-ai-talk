@@ -1,6 +1,7 @@
 import { RigidBody } from "@react-three/rapier";
-import { Text, useTexture } from "@react-three/drei";
+import { Text, useTexture, Float, RoundedBox } from "@react-three/drei";
 import { AudioZone } from "./AudioZone";
+import { Portal } from "./Portal";
 
 export const Room4 = () => {
   const cardNames = ["utforsk", "definer", "planlegg", "revider", "kjør", "verifiser", "fiks"];
@@ -19,58 +20,58 @@ export const Room4 = () => {
       {/* Floor */}
       <RigidBody type="fixed" position={[0, -0.1, 0]}>
         <mesh receiveShadow>
-          <boxGeometry args={[26, 0.2, 26]} />
+          <boxGeometry args={[36, 0.2, 36]} />
           <meshStandardMaterial color="#140f05" roughness={0.8} metalness={0.2} />
         </mesh>
       </RigidBody>
 
       {/* Walls */}
-      <RigidBody type="fixed" position={[0, 3, -13]}>
+      <RigidBody type="fixed" position={[0, 3, -18]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[26, 6, 0.4]} />
+          <boxGeometry args={[36, 6, 0.4]} />
           <meshStandardMaterial color="#1f180d" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 3, 13]}>
+      <RigidBody type="fixed" position={[0, 3, 18]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[26, 6, 0.4]} />
+          <boxGeometry args={[36, 6, 0.4]} />
           <meshStandardMaterial color="#1f180d" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[-13, 3, 0]}>
+      <RigidBody type="fixed" position={[-18, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 26]} />
+          <boxGeometry args={[0.4, 6, 36]} />
           <meshStandardMaterial color="#1f180d" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[13, 3, 0]}>
+      <RigidBody type="fixed" position={[18, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 26]} />
+          <boxGeometry args={[0.4, 6, 36]} />
           <meshStandardMaterial color="#1f180d" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
 
       {/* Ceiling Neon Border (Yellow theme) */}
-      <mesh position={[0, 5.95, -12.75]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[0, 5.95, -17.75]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#ffff30" toneMapped={false} />
       </mesh>
-      <mesh position={[0, 5.95, 12.75]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[0, 5.95, 17.75]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#ffff30" toneMapped={false} />
       </mesh>
-      <mesh position={[-12.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[-17.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#ffff30" toneMapped={false} />
       </mesh>
-      <mesh position={[12.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[17.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#ffff30" toneMapped={false} />
       </mesh>
 
       {/* Title */}
       <Text
-        position={[0, 5.0, -12.5]}
+        position={[0, 5.0, -17.5]}
         fontSize={0.5}
         color="#ffff30"
         outlineWidth={0.015}
@@ -92,7 +93,7 @@ export const Room4 = () => {
         </Text>
         <AudioZone
           position={[0, 1, 0]}
-          size={[6, 3.5, 4]}
+          size={[10, 4, 7]}
           audioUrl="/tts/hvordan_prompte.mp3"
           subtitleUrl="/tts/hvordan_prompte.json"
         />
@@ -105,45 +106,39 @@ export const Room4 = () => {
           const angle = (idx - 3) * 0.4;
           const radius = 6;
           const x = radius * Math.sin(angle);
-          const z = radius * Math.cos(angle) - 4;
-          const rotY = angle;
+          const z = -radius * Math.cos(angle);
+          const rotY = -angle;
 
           const frontTex = textures[`${name}_f`];
           const backTex = textures[`${name}_b`];
 
           return (
-            <group key={name} position={[x, 1.2, z]} rotation={[0, rotY, 0]}>
+            <group key={name} position={[x, 2.2, z]} rotation={[0, rotY, 0]}>
               {/* Giant Card Shape */}
-              <RigidBody type="fixed" colliders="cuboid">
+              <Float floatIntensity={2} speed={1.5} rotationIntensity={0.2}>
                 {/* Thin middle card body */}
-                <mesh castShadow receiveShadow>
-                  <boxGeometry args={[1.2, 1.8, 0.04]} />
+                <RoundedBox args={[1.2, 1.8, 0.01]} radius={0.05} smoothness={4} castShadow receiveShadow>
                   <meshStandardMaterial color="#1e293b" roughness={0.5} metalness={0.5} />
-                </mesh>
+                </RoundedBox>
                 {/* Front face plane displaying front image */}
-                <mesh position={[0, 0, 0.021]} castShadow>
+                <mesh position={[0, 0, 0.006]} castShadow>
                   <planeGeometry args={[1.2, 1.8]} />
-                  <meshStandardMaterial map={frontTex} roughness={0.2} metalness={0.1} />
+                  <meshStandardMaterial map={frontTex} transparent roughness={0.2} metalness={0.1} />
                 </mesh>
                 {/* Back face plane displaying back image */}
-                <mesh position={[0, 0, -0.021]} rotation={[0, Math.PI, 0]} castShadow>
+                <mesh position={[0, 0, -0.006]} rotation={[0, Math.PI, 0]} castShadow>
                   <planeGeometry args={[1.2, 1.8]} />
-                  <meshStandardMaterial map={backTex} roughness={0.2} metalness={0.1} />
+                  <meshStandardMaterial map={backTex} transparent roughness={0.2} metalness={0.1} />
                 </mesh>
-                {/* Golden/Yellow Card border outline frame */}
-                <mesh position={[0, 0, 0]}>
-                  <boxGeometry args={[1.22, 1.82, 0.042]} />
-                  <meshStandardMaterial color="#ffff30" emissive="#ffff30" emissiveIntensity={0.15} roughness={0.3} wireframe />
-                </mesh>
-              </RigidBody>
+              </Float>
             </group>
           );
         })}
 
         {/* Audio Zone in front of the cards */}
         <AudioZone
-          position={[0, 1, -2]}
-          size={[8, 3.5, 5]}
+          position={[0, 1, 0]}
+          size={[12, 4, 8]}
           audioUrl="/tts/fremgangsmaate.mp3"
           subtitleUrl="/tts/fremgangsmaate.json"
         />
@@ -184,7 +179,7 @@ export const Room4 = () => {
 
         <AudioZone
           position={[-1, 1, 0]}
-          size={[4, 3.5, 5]}
+          size={[7, 4, 8]}
           audioUrl="/tts/agents_md.mp3"
           subtitleUrl="/tts/agents_md.json"
         />
@@ -225,7 +220,7 @@ export const Room4 = () => {
 
         <AudioZone
           position={[1, 1, 0]}
-          size={[4, 3.5, 5]}
+          size={[7, 4, 8]}
           audioUrl="/tts/noen_ting_gjelder_alle.mp3"
           subtitleUrl="/tts/noen_ting_gjelder_alle.json"
         />
@@ -257,7 +252,7 @@ export const Room4 = () => {
 
         <AudioZone
           position={[0, 1, -1]}
-          size={[4, 3.5, 4]}
+          size={[7, 4, 7]}
           audioUrl="/tts/styre_agenter.mp3"
           subtitleUrl="/tts/styre_agenter.json"
         />
@@ -266,6 +261,9 @@ export const Room4 = () => {
       {/* General Lights */}
       <ambientLight intensity={0.15} />
       <directionalLight position={[5, 10, 5]} intensity={0.4} castShadow />
+
+      {/* Portal to Lobby */}
+      <Portal position={[0, 0, -17.5]} room="lobby" label="Tilbake til Lobby" color="#ffffff" />
     </group>
   );
 };

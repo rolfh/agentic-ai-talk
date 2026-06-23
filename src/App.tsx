@@ -9,7 +9,7 @@ import { Room2 } from "./components/Room2";
 import { Room3 } from "./components/Room3";
 import { Room4 } from "./components/Room4";
 import { useStore } from "./store";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -22,38 +22,18 @@ export default function App() {
   const currentRoom = useStore((state) => state.currentRoom);
   const setRoom = useStore((state) => state.setRoom);
   const subtitle = useStore((state) => state.subtitle);
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(true);
+
+  // Force title on mount to override browser caching of old title
+  useEffect(() => {
+    document.title = "Agentic AI talk";
+  }, []);
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-[#050505] relative font-sans">
-      {/* Premium Start Screen Overlay */}
-      {!started && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
-          <div className="bg-white/10 p-12 rounded-2xl border border-white/20 shadow-2xl flex flex-col items-center max-w-lg text-center backdrop-blur-xl">
-            <h1 className="text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 tracking-tight">
-              Agentisk KI
-            </h1>
-            <h2 className="text-2xl font-medium text-gray-200 mb-6">3D Presentasjon</h2>
-            <p className="text-gray-400 mb-8 leading-relaxed">
-              Utforsk agentens natur i første person. Bruk <kbd className="bg-gray-800 text-gray-200 px-2 py-1 rounded">W A S D</kbd> for å bevege deg og musen for å se deg rundt.
-            </p>
-            <button 
-              className="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-              onClick={() => setStarted(true)}
-            >
-              Start Opplevelsen
-            </button>
-          </div>
-        </div>
-      )}
 
-      {/* HUD HUD Overlay */}
-      {started && (
-        <div className="absolute top-6 left-6 z-10 text-white/80 bg-black/40 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 text-sm flex gap-4">
-          <span><span className="font-bold text-white">Esc</span> = Meny</span>
-          <span><span className="font-bold text-white">WASD</span> = Gå</span>
-        </div>
-      )}
+
+      {/* HUD HUD Overlay removed as per user request */}
 
       {/* 3D Canvas */}
       <KeyboardControls map={keyboardMap}>
@@ -91,15 +71,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Back Button HUD */}
-      {currentRoom !== "lobby" && started && (
-         <button 
-          onClick={() => setRoom("lobby")} 
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 bg-white/10 backdrop-blur-lg border border-white/30 text-white px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors shadow-lg"
-         >
-           ← Tilbake til Lobby
-         </button>
-      )}
+
     </div>
   );
 }

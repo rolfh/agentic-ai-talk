@@ -5,7 +5,7 @@ import { RigidBody, CapsuleCollider, RapierRigidBody } from "@react-three/rapier
 import * as THREE from "three";
 import { useStore } from "../store";
 
-const SPEED = 9;
+const SPEED = 14;
 const direction = new THREE.Vector3();
 const frontVector = new THREE.Vector3();
 const sideVector = new THREE.Vector3();
@@ -27,7 +27,7 @@ export const Player = () => {
         rigidBody.current.setTranslation({ x: 0, y: 2, z: 0 }, true);
       } else {
         // Place player near the entry of the selected exhibition room (within its floor limits)
-        rigidBody.current.setTranslation({ x: 0, y: 2, z: 6 }, true);
+        rigidBody.current.setTranslation({ x: 0, y: 2, z: 10 }, true);
       }
     }
   }, [currentRoom]);

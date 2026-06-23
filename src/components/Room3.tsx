@@ -1,6 +1,7 @@
 import { RigidBody } from "@react-three/rapier";
 import { Text } from "@react-three/drei";
 import { AudioZone } from "./AudioZone";
+import { Portal } from "./Portal";
 
 export const Room3 = () => {
   return (
@@ -8,58 +9,58 @@ export const Room3 = () => {
       {/* Floor */}
       <RigidBody type="fixed" position={[0, -0.1, 0]}>
         <mesh receiveShadow>
-          <boxGeometry args={[26, 0.2, 26]} />
+          <boxGeometry args={[36, 0.2, 36]} />
           <meshStandardMaterial color="#080d1a" roughness={0.85} metalness={0.2} />
         </mesh>
       </RigidBody>
 
       {/* Walls */}
-      <RigidBody type="fixed" position={[0, 3, -13]}>
+      <RigidBody type="fixed" position={[0, 3, -18]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[26, 6, 0.4]} />
+          <boxGeometry args={[36, 6, 0.4]} />
           <meshStandardMaterial color="#0e1324" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 3, 13]}>
+      <RigidBody type="fixed" position={[0, 3, 18]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[26, 6, 0.4]} />
+          <boxGeometry args={[36, 6, 0.4]} />
           <meshStandardMaterial color="#0e1324" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[-13, 3, 0]}>
+      <RigidBody type="fixed" position={[-18, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 26]} />
+          <boxGeometry args={[0.4, 6, 36]} />
           <meshStandardMaterial color="#0e1324" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[13, 3, 0]}>
+      <RigidBody type="fixed" position={[18, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 26]} />
+          <boxGeometry args={[0.4, 6, 36]} />
           <meshStandardMaterial color="#0e1324" roughness={0.7} metalness={0.4} />
         </mesh>
       </RigidBody>
 
       {/* Ceiling Neon Border (Blue theme) */}
-      <mesh position={[0, 5.95, -12.75]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[0, 5.95, -17.75]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#3080ff" toneMapped={false} />
       </mesh>
-      <mesh position={[0, 5.95, 12.75]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[0, 5.95, 17.75]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#3080ff" toneMapped={false} />
       </mesh>
-      <mesh position={[-12.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[-17.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#3080ff" toneMapped={false} />
       </mesh>
-      <mesh position={[12.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[26, 0.08, 0.08]} />
+      <mesh position={[17.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[36, 0.08, 0.08]} />
         <meshBasicMaterial color="#3080ff" toneMapped={false} />
       </mesh>
 
       {/* Title */}
       <Text
-        position={[0, 5.0, -12.5]}
+        position={[0, 5.0, -17.5]}
         fontSize={0.5}
         color="#3080ff"
         outlineWidth={0.015}
@@ -98,7 +99,7 @@ export const Room3 = () => {
 
         <AudioZone
           position={[0, 1, 0]}
-          size={[4, 3.5, 5]}
+          size={[7, 4, 8]}
           audioUrl="/tts/hva_kan_agent_gjoere.mp3"
           subtitleUrl="/tts/hva_kan_agent_gjoere.json"
         />
@@ -133,7 +134,7 @@ export const Room3 = () => {
 
         <AudioZone
           position={[0, 1, 0]}
-          size={[4, 3.5, 5]}
+          size={[7, 4, 8]}
           audioUrl="/tts/tusen_problemer.mp3"
           subtitleUrl="/tts/tusen_problemer.json"
         />
@@ -183,7 +184,7 @@ export const Room3 = () => {
 
         <AudioZone
           position={[0, 1, 1]}
-          size={[4, 3.5, 4]}
+          size={[7, 4, 7]}
           audioUrl="/tts/mcp_mange_programmer.mp3"
           subtitleUrl="/tts/mcp_mange_programmer.json"
         />
@@ -226,7 +227,7 @@ export const Room3 = () => {
 
         <AudioZone
           position={[0, 1, -1]}
-          size={[4, 3.5, 4]}
+          size={[7, 4, 7]}
           audioUrl="/tts/mcp_servere.mp3"
           subtitleUrl="/tts/mcp_servere.json"
         />
@@ -235,6 +236,9 @@ export const Room3 = () => {
       {/* General Lights */}
       <ambientLight intensity={0.15} />
       <directionalLight position={[-5, 10, 5]} intensity={0.4} castShadow />
+
+      {/* Portal to Room 4 */}
+      <Portal position={[0, 0, -17.5]} room="room4" label="Til Rom 4: Mestring" color="#ffff30" />
     </group>
   );
 };
