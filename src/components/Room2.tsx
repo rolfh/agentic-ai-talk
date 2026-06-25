@@ -101,7 +101,7 @@ export const Room2 = () => {
           maxWidth={1.8}
           textAlign="center"
         >
-          [ AI WEB PORTAL ]\nOnline\nWaiting for Input...
+          {"[ AI WEB PORTAL ]\nOnline\nVenter på input..."}
         </Text>
 
         {/* Audio Trigger Zone: Walk in front of the PC */}

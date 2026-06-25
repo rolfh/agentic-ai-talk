@@ -1,148 +1,196 @@
 import { useMemo } from "react";
-import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useStore } from "../store";
-import { useGLTF, Text, Grid, useTexture } from "@react-three/drei";
+import { RigidBody } from "@react-three/rapier";
+import { useTexture, Text } from "@react-three/drei";
 import * as THREE from "three";
 
 import { Portal } from "./Portal";
+import { Furniture } from "./Furniture";
 
 export const Lobby = () => {
-  const { scene: wetFloorSign } = useGLTF("/models/psx_wet_floor_sign/scene.gltf");
-
-  // Enable shadows for the wet floor sign centerpiece model
-  const wetFloorSignModel = useMemo(() => {
-    const clone = wetFloorSign.clone();
-    clone.traverse((child) => {
-      if ((child as any).isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    return clone;
-  }, [wetFloorSign]);
-
-  // Load laminate floor textures
+  // Load laminate floor textures (gir et varmt tregulv)
   const floorTextures = useTexture({
     map: "/textures/laminate_floor_03/laminate_floor_03_diff_1k.jpg",
     normalMap: "/textures/laminate_floor_03/laminate_floor_03_nor_gl_1k.jpg",
     roughnessMap: "/textures/laminate_floor_03/laminate_floor_03_rough_1k.jpg",
   });
 
-  // Setup texture wrapping and repeat/tiling
   useMemo(() => {
     Object.values(floorTextures).forEach((texture) => {
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(8, 8); // Tiling factor for 30x30m floor
+      texture.repeat.set(6, 6);
     });
   }, [floorTextures]);
 
   return (
     <group>
-      {/* Floor - Laminate floor textures applied with a slightly dark tint */}
+      {/* Tregulv (18x18) */}
       <RigidBody type="fixed" position={[0, -0.1, 0]}>
         <mesh receiveShadow>
-          <boxGeometry args={[30, 0.2, 30]} />
-          <meshStandardMaterial 
-            {...floorTextures}
-            color="#666666" 
-            roughness={1.0} 
-            metalness={0.0} 
-          />
+          <boxGeometry args={[18, 0.2, 18]} />
+          <meshStandardMaterial {...floorTextures} color="#b6905f" roughness={0.85} metalness={0} />
+        </mesh>
+      </RigidBody>
+
+      {/* Tak (18x18) */}
+      <RigidBody type="fixed" position={[0, 6.1, 0]}>
+        <mesh receiveShadow>
+          <boxGeometry args={[18, 0.2, 18]} />
+          <meshStandardMaterial color="#cdbfa6" roughness={1} />
+        </mesh>
+      </RigidBody>
+
+      {/* Varme pussede vegger */}
+      {/* Bakvegg (Nord) */}
+      <RigidBody type="fixed" position={[0, 3, -9]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[18, 6, 0.4]} />
+          <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
         </mesh>
       </RigidBody>
       
-      {/* Subtle floor grid overlay */}
-      <Grid 
-        position={[0, 0.01, 0]} 
-        args={[30, 30]} 
-        cellSize={1.5} 
-        cellThickness={0.3} 
-        cellColor="#222" 
-        sectionSize={4.5} 
-        sectionThickness={0.6} 
-        sectionColor="#444" 
-        fadeDistance={25} 
-      />
-
-      {/* Walls - Matte structural panels */}
-      <RigidBody type="fixed" position={[0, 3, -15]}>
+      {/* Venstre vegg (Vest) */}
+      <RigidBody type="fixed" position={[-9, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[30, 6, 0.4]} />
-          <meshStandardMaterial color="#121215" roughness={0.5} metalness={0.6} />
+          <boxGeometry args={[0.4, 6, 18]} />
+          <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 3, 15]}>
+      
+      {/* Høyre vegg (Øst) */}
+      <RigidBody type="fixed" position={[9, 3, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[30, 6, 0.4]} />
-          <meshStandardMaterial color="#121215" roughness={0.5} metalness={0.6} />
-        </mesh>
-      </RigidBody>
-      <RigidBody type="fixed" position={[-15, 3, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 30]} />
-          <meshStandardMaterial color="#121215" roughness={0.5} metalness={0.6} />
-        </mesh>
-      </RigidBody>
-      <RigidBody type="fixed" position={[15, 3, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 30]} />
-          <meshStandardMaterial color="#121215" roughness={0.5} metalness={0.6} />
+          <boxGeometry args={[0.4, 6, 18]} />
+          <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
         </mesh>
       </RigidBody>
 
-      {/* Glowing border running along the top edges of the walls (futuristic architecture style) */}
-      <mesh position={[0, 5.95, -14.75]}>
-        <boxGeometry args={[30, 0.08, 0.08]} />
-        <meshBasicMaterial color="#ffffff" toneMapped={false} />
-      </mesh>
-      <mesh position={[0, 5.95, 14.75]}>
-        <boxGeometry args={[30, 0.08, 0.08]} />
-        <meshBasicMaterial color="#ffffff" toneMapped={false} />
-      </mesh>
-      <mesh position={[-14.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[30, 0.08, 0.08]} />
-        <meshBasicMaterial color="#ffffff" toneMapped={false} />
-      </mesh>
-      <mesh position={[14.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[30, 0.08, 0.08]} />
-        <meshBasicMaterial color="#ffffff" toneMapped={false} />
-      </mesh>
+      {/* Frontvegg med vinduer (Sør, z=9) */}
+      <group position={[0, 0, 9]}>
+        {/* Solide veggdeler */}
+        <RigidBody type="fixed" position={[-6.5, 3, 0]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[5, 6, 0.4]} />
+            <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
+          </mesh>
+        </RigidBody>
+        <RigidBody type="fixed" position={[6.5, 3, 0]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[5, 6, 0.4]} />
+            <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
+          </mesh>
+        </RigidBody>
+        <RigidBody type="fixed" position={[0, 0.75, 0]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[8, 1.5, 0.4]} />
+            <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
+          </mesh>
+        </RigidBody>
+        <RigidBody type="fixed" position={[0, 5, 0]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[8, 2, 0.4]} />
+            <meshStandardMaterial color="#d9cbb2" roughness={0.95} metalness={0} />
+          </mesh>
+        </RigidBody>
 
-      {/* Centerpiece structure */}
-      <group position={[0, 0, -2]}>
-        <primitive object={wetFloorSignModel} scale={1.25} />
-        <pointLight position={[0, 3.8, 0]} intensity={1.5} color="#ffa500" distance={8} decay={2} castShadow />
+        {/* Vindusramme og glass */}
+        <RigidBody type="fixed" position={[0, 2.75, 0]}>
+          <mesh>
+            <boxGeometry args={[8, 2.5, 0.1]} />
+            <meshPhysicalMaterial color="#e0f7fa" transmission={0.8} opacity={1} transparent roughness={0.1} />
+          </mesh>
+        </RigidBody>
+        <mesh position={[0, 2.75, 0]}>
+          <boxGeometry args={[0.2, 2.5, 0.15]} />
+          <meshStandardMaterial color="#4a4a4a" />
+        </mesh>
+
+        {/* Kveldshimmel utenfor */}
+        <mesh position={[0, 3, 3]} rotation={[0, Math.PI, 0]}>
+          <planeGeometry args={[40, 20]} />
+          <meshBasicMaterial color="#ffa550" />
+        </mesh>
+        
+        {/* Potteplanter ved vinduet */}
+        <Furniture name="plantSmall1" position={[-3, 1.5, -0.3]} scale={2.5} />
+        <Furniture name="plantSmall2" position={[3, 1.5, -0.3]} scale={2.5} />
       </group>
 
-      {/* Modern Neon Doors */}
-      <Portal position={[-7, 0, -14.7]} room="room1" label="Rom 1: Agentens Natur" color="#ff2a44" />
-      <Portal position={[7, 0, -14.7]} room="room2" label="Rom 2: Agenten i Arbeid" color="#10ff70" />
-      <Portal position={[-14.7, 0, 0]} rotation={[0, Math.PI / 2, 0]} room="room3" label="Rom 3: Tilkoblinger" color="#3080ff" />
-      <Portal position={[14.7, 0, 0]} rotation={[0, -Math.PI / 2, 0]} room="room4" label="Rom 4: Mestring" color="#ffff30" />
-      
-      {/* Lights with a shadow-casting DirectionalLight */}
-      <directionalLight 
-        position={[5, 15, 5]} 
-        intensity={0.6} 
-        castShadow 
-        shadow-mapSize={[1024, 1024]}
-        shadow-camera-far={40}
-        shadow-camera-left={-15}
-        shadow-camera-right={15}
-        shadow-camera-top={15}
-        shadow-camera-bottom={-15}
+      {/* ---------- Stue-vignett (midten) ---------- */}
+      {/* Teppe */}
+      <Furniture name="rugRectangle" position={[0, 0.01, 1]} scale={[4.0, 4.0, 4.0]} />
+
+      {/* Sofa vendt mot spilleren + lenestoler rundt sofabord */}
+      <Furniture name="loungeSofa" position={[0, 0, -1.5]} rotation={[0, 0, 0]} scale={2.8} solid />
+      <Furniture name="loungeChair" position={[-3.5, 0, 1.5]} rotation={[0, Math.PI * 0.7, 0]} scale={2.6} solid />
+      <Furniture name="loungeChair" position={[3.5, 0, 1.5]} rotation={[0, -Math.PI * 0.7, 0]} scale={2.6} solid />
+      <Furniture name="tableCoffee" position={[0, 0, 1]} scale={2.8} solid />
+
+      {/* Gulvlampe med varmt lys */}
+      <Furniture name="lampRoundFloor" position={[-4.5, 0, -1.5]} scale={2.8} />
+      <pointLight position={[-4.5, 2.5, -1.5]} intensity={5} color="#ffb866" distance={9} decay={2} castShadow />
+
+      {/* Sofakrok-lampe (varm fyll) */}
+      <Furniture name="lampRoundTable" position={[4.5, 0, -1.5]} scale={2.8} />
+      <pointLight position={[4.5, 1.5, -1.5]} intensity={3} color="#ffcf99" distance={7} decay={2} />
+
+      {/* Bokhylle-vegg (venstre side) */}
+      <Furniture name="bookcaseOpen" position={[-8.4, 0, 4]} rotation={[0, Math.PI / 2, 0]} scale={2.8} solid />
+      <Furniture name="bookcaseOpen" position={[-8.4, 0, 1.5]} rotation={[0, Math.PI / 2, 0]} scale={2.8} solid />
+
+      {/* Planter i hjørnene */}
+      <Furniture name="pottedPlant" position={[-7.5, 0, -7.5]} scale={3.0} />
+      <Furniture name="pottedPlant" position={[7.5, 0, -7.5]} scale={3.0} />
+      <Furniture name="pottedPlant" position={[7.5, 0, 7.5]} scale={3.0} />
+
+      {/* ---------- Arbeidskrok ---------- */}
+      <group position={[6.5, 0, 2]}>
+        {/* Teppe under pult */}
+        <Furniture name="rugRound" position={[0.5, 0.01, 0]} scale={3.5} />
+        
+        <Furniture name="desk" position={[0, 0, 0]} rotation={[0, -Math.PI / 2, 0]} scale={2.6} solid />
+        <Furniture name="computerScreen" position={[0.1, 1.0, 0]} rotation={[0, -Math.PI / 2, 0]} scale={2.6} />
+        <Furniture name="computerKeyboard" position={[0.45, 1.0, 0]} rotation={[0, -Math.PI / 2, 0]} scale={2.6} />
+        <Furniture name="chairDesk" position={[1.3, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={2.4} solid />
+        <Furniture name="lampSquareTable" position={[-0.1, 1.0, 0.7]} scale={2.2} />
+        
+        {/* Mindre, varmere lys på skjermen så den ikke brenner ut */}
+        <pointLight position={[0.1, 1.6, 0]} intensity={0.8} color="#ffe4cc" distance={5} decay={2} />
+      </group>
+
+      {/* ---------- Dører til rommene ---------- */}
+      {/* START-DØR (Fremhevet) */}
+      <Portal position={[0, 0, -8.7]} room="room2" label="Kontoret" color="#a9c08e" />
+      <Furniture name="rugDoormat" position={[0, 0.01, -7.2]} scale={3.0} />
+      <pointLight position={[0, 2.5, -7.2]} intensity={5} color="#ffd8a8" distance={6} decay={2} castShadow />
+      <Text position={[0, 3.2, -8.6]} fontSize={0.3} color="#ffffff" outlineWidth={0.03} outlineColor="#000000">
+        START HER ▼
+      </Text>
+
+      {/* Andre rom */}
+      <Portal position={[-8.7, 0, -2]} rotation={[0, Math.PI / 2, 0]} room="room3" label="Postrommet" color="#93b4cc" />
+      <Portal position={[8.7, 0, -2]} rotation={[0, -Math.PI / 2, 0]} room="room4" label="Biblioteket" color="#d98c6a" />
+
+      {/* ---------- Generell belysning ---------- */}
+      <ambientLight intensity={0.55} color="#ffe8cc" />
+      <hemisphereLight args={["#fff1dd", "#5a4a38", 0.5]} />
+      <directionalLight
+        position={[6, 13, 5]}
+        intensity={0.8}
+        color="#ffe0b0"
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-far={45}
+        shadow-camera-left={-18}
+        shadow-camera-right={18}
+        shadow-camera-top={18}
+        shadow-camera-bottom={-18}
         shadow-bias={-0.0005}
       />
-      <spotLight position={[0, 9, -5]} intensity={1.2} angle={0.7} penumbra={1} castShadow />
     </group>
   );
 };
 
-useGLTF.preload("/models/psx_wet_floor_sign/scene.gltf");
-
 useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_diff_1k.jpg");
 useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_nor_gl_1k.jpg");
 useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_rough_1k.jpg");
-
-

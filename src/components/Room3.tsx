@@ -170,7 +170,7 @@ export const Room3 = () => {
           textAlign="center"
           rotation={[-0.2, 0, 0]}
         >
-          [ MODEL CONTEXT PROTOCOL ]\nBidirectional Connection\nActive MCP Server Channels
+          {"[ MODEL CONTEXT PROTOCOL ]\nToveis tilkobling\nAktive MCP-kanaler"}
         </Text>
 
         <Text
@@ -213,7 +213,7 @@ export const Room3 = () => {
           textAlign="left"
           rotation={[0, Math.PI, 0]}
         >
-          • Chrome & Firefox\n• Photoshop & Affinity\n• DaVinci & Premiere Pro\n• Blender 3D\n• Meta & LinkedIn Ads\n• Custom Server Integration
+          {"• Chrome & Firefox\n• Photoshop & Affinity\n• DaVinci & Premiere Pro\n• Blender 3D\n• Meta & LinkedIn Ads\n• Eget favorittprogram"}
         </Text>
 
         <Text

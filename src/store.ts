@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 interface AppState {
-  currentRoom: 'lobby' | 'room1' | 'room2' | 'room3' | 'room4';
+  currentRoom: 'lobby' | 'room2' | 'room3' | 'room4';
   setRoom: (room: AppState['currentRoom']) => void;
   subtitle: string | null;
   setSubtitle: (subtitle: string | null) => void;

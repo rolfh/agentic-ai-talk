@@ -35,7 +35,7 @@ export const Player = () => {
 
   useFrame((state) => {
     if (!rigidBody.current) return;
-    const { forward, backward, left, right } = getKeys();
+    const { forward, backward, left, right, jump } = getKeys();
     
     // Get current velocity and position
     const velocity = rigidBody.current.linvel();
@@ -55,8 +55,13 @@ export const Player = () => {
       .multiplyScalar(SPEED)
       .applyEuler(state.camera.rotation);
     
-    // Update velocity, keeping the Y velocity for gravity/jumping (though jumping is not implemented here)
-    rigidBody.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z }, true);
+    let nextVelY = velocity.y;
+    if (jump && Math.abs(velocity.y) < 0.05) {
+      nextVelY = 7;
+    }
+    
+    // Update velocity, keeping the Y velocity for gravity/jumping
+    rigidBody.current.setLinvel({ x: direction.x, y: nextVelY, z: direction.z }, true);
   });
 
   return (
