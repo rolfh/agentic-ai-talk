@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
-import { RigidBody, CapsuleCollider, RapierRigidBody } from "@react-three/rapier";
+import { RigidBody, CapsuleCollider, CuboidCollider, RapierRigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 import { useStore } from "../store";
 
@@ -23,17 +23,25 @@ export const Player = () => {
       rigidBody.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
 
       // Spawn at a safe coordinate depending on the room
-      if (currentRoom === "lobby") {
-        rigidBody.current.setTranslation({ x: 0, y: 2, z: 0 }, true);
-      } else {
-        // Place player near the entry of the selected exhibition room (within its floor limits)
-        rigidBody.current.setTranslation({ x: 0, y: 2, z: 10 }, true);
+      if (currentRoom === "outside") {
+        // Start outdoors on the path in front of the house, facing the door
+        rigidBody.current.setTranslation({ x: 0, y: 2, z: 12 }, true);
+      } else if (currentRoom === "lobby") {
+        rigidBody.current.setTranslation({ x: 0, y: 2, z: 3.0 }, true);
+      } else if (currentRoom === "room2") {
+        rigidBody.current.setTranslation({ x: 0, y: 2, z: -5.0 }, true);
+      } else if (currentRoom === "room3") {
+        rigidBody.current.setTranslation({ x: 3, y: 2, z: 5.0 }, true);
+      } else if (currentRoom === "room4") {
+        rigidBody.current.setTranslation({ x: -3, y: 2, z: 5.0 }, true);
       }
     }
   }, [currentRoom]);
 
+  const isSpectating = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("view");
 
   useFrame((state) => {
+    if (isSpectating) return;
     if (!rigidBody.current) return;
     const { forward, backward, left, right, jump } = getKeys();
     
@@ -70,10 +78,12 @@ export const Player = () => {
       colliders={false} 
       mass={1} 
       type="dynamic" 
-      position={[0, 2, 0]} 
+      position={[0, 2, 12]} 
       enabledRotations={[false, false, false]}
+      name="player"
     >
-      <CapsuleCollider args={[0.5, 0.5]} />
+      <CapsuleCollider args={[0.5, 0.5]} friction={0} />
+      <CuboidCollider args={[0.3, 0.1, 0.3]} position={[0, -0.7, 0]} friction={0} />
       <mesh visible={false}>
         <capsuleGeometry args={[0.5, 1, 4]} />
         <meshBasicMaterial color="red" />

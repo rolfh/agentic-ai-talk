@@ -1,12 +1,37 @@
 [
   {
     "start": 0.0,
-    "end": 4.78,
-    "text": "Å få en agent til å skrive kode er en måte å løse tusen problemer."
+    "end": 2.3,
+    "text": "Mønsteret er det samme i alt dette:"
   },
   {
-    "start": 5.68,
-    "end": 10.6,
-    "text": "Alt du typisk gjør på en PC kan en agent gjøre med kode, hvis du gir den tilgang."
+    "start": 2.6,
+    "end": 5.6,
+    "text": "du peker på filer som allerede ligger der,"
+  },
+  {
+    "start": 6.16,
+    "end": 8.22,
+    "text": "du beskriver utfallet du vil ha –"
+  },
+  {
+    "start": 8.7,
+    "end": 10.4,
+    "text": "ikke hvert steg, bare målet –"
+  },
+  {
+    "start": 10.84,
+    "end": 12.88,
+    "text": "og du lar agenten gjøre resten."
+  },
+  {
+    "start": 13.72,
+    "end": 17.78,
+    "text": "Alt du typisk gjør på en PC kan en agent løse med kode,"
+  },
+  {
+    "start": 18.22,
+    "end": 19.14,
+    "text": "hvis du gir den tilgang."
   }
 ]

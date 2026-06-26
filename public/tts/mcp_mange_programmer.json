@@ -1,17 +1,22 @@
 [
   {
     "start": 0.0,
-    "end": 6.92,
-    "text": "Mange programmer som kjører på maskina di har støtte for MCP (Model Context Protocol)."
+    "end": 6.14,
+    "text": "Til nå har vi snakket om filer på maskina. Men agenten kan også strekke seg ut."
   },
   {
-    "start": 7.46,
-    "end": 10.66,
-    "text": "Det er en måte å lage en 2-veis kommunikasjon til agenten."
+    "start": 7.8999999999999915,
+    "end": 16.18,
+    "text": "MCP – Model Context Protocol – er en standard kobling som lar agenten snakke med programmer og tjenester:"
   },
   {
-    "start": 11.28,
-    "end": 16.16,
-    "text": "Agenten leser tilstanden til et program og vet hvilke funksjoner som er mulig."
+    "start": 16.8,
+    "end": 21.38,
+    "text": "den leser tilstanden deres og vet hvilke funksjoner som er mulige."
+  },
+  {
+    "start": 22.0,
+    "end": 23.54,
+    "text": "En toveis forbindelse."
   }
 ]

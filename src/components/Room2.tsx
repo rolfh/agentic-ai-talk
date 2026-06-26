@@ -1,215 +1,403 @@
-import { RigidBody } from "@react-three/rapier";
-import { Text } from "@react-three/drei";
+import { useMemo } from "react";
+import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import { useTexture, Text, Billboard } from "@react-three/drei";
+import * as THREE from "three";
+
+import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Portal } from "./Portal";
+import { Football } from "./Football";
 
+/**
+ * KONTORET — lyst, ryddig kontor med dagslys. Tema: «agenten jobber på dine filer».
+ * Spilleren går fra lobby-døra (z = -8.7) framover langs en lys løper, forbi fire
+ * nummererte arbeidsstasjoner (1 → 4), og ut døra til Postrommet (z = +8.7).
+ */
 export const Room2 = () => {
+  // Lyst tregulv (samme laminat som lobbyen, men mer dagslys på det)
+  const floorTextures = useTexture({
+    map: "/textures/laminate_floor_03/laminate_floor_03_diff_1k.jpg",
+    normalMap: "/textures/laminate_floor_03/laminate_floor_03_nor_gl_1k.jpg",
+    roughnessMap: "/textures/laminate_floor_03/laminate_floor_03_rough_1k.jpg",
+  });
+
+  // Load fine grained wood for floor and ceiling
+  const woodTextures = useTexture({
+    map: "/textures/fine_grained_wood/diff.jpg",
+    normalMap: "/textures/fine_grained_wood/nor.jpg",
+    roughnessMap: "/textures/fine_grained_wood/rough.jpg",
+  });
+
+  const daytimeSkyTexture = useTexture("/artwork/daytime_sky.png");
+
+  useMemo(() => {
+    Object.values(floorTextures).forEach((texture) => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(6, 6);
+    });
+    Object.values(woodTextures).forEach((texture) => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(6, 6);
+    });
+  }, [floorTextures, woodTextures]);
+
+  const textureOrganizing = useTexture("/artwork/kontor_organizing.png");
+  const texturePdfData = useTexture("/artwork/kontor_pdf_data.png");
+
   return (
     <group>
-      {/* Floor */}
+      {/* ---------- Rom-skall (18 x 18) ---------- */}
+      {/* Gulv */}
       <RigidBody type="fixed" position={[0, -0.1, 0]}>
         <mesh receiveShadow>
-          <boxGeometry args={[34, 0.2, 34]} />
-          <meshStandardMaterial color="#0b0f19" roughness={0.8} metalness={0.3} />
+          <boxGeometry args={[18, 0.2, 18]} />
+          <meshStandardMaterial {...woodTextures} color="#c8a877" />
         </mesh>
       </RigidBody>
 
-      {/* Walls */}
-      <RigidBody type="fixed" position={[0, 3, -17]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[34, 6, 0.4]} />
-          <meshStandardMaterial color="#121829" roughness={0.6} metalness={0.5} />
-        </mesh>
-      </RigidBody>
-      <RigidBody type="fixed" position={[0, 3, 17]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[34, 6, 0.4]} />
-          <meshStandardMaterial color="#121829" roughness={0.6} metalness={0.5} />
-        </mesh>
-      </RigidBody>
-      <RigidBody type="fixed" position={[-17, 3, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 34]} />
-          <meshStandardMaterial color="#121829" roughness={0.6} metalness={0.5} />
-        </mesh>
-      </RigidBody>
-      <RigidBody type="fixed" position={[17, 3, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 34]} />
-          <meshStandardMaterial color="#121829" roughness={0.6} metalness={0.5} />
-        </mesh>
-      </RigidBody>
-
-      {/* Ceiling Neon Border (Green theme) */}
-      <mesh position={[0, 5.95, -16.75]}>
-        <boxGeometry args={[34, 0.08, 0.08]} />
-        <meshBasicMaterial color="#10ff70" toneMapped={false} />
-      </mesh>
-      <mesh position={[0, 5.95, 16.75]}>
-        <boxGeometry args={[34, 0.08, 0.08]} />
-        <meshBasicMaterial color="#10ff70" toneMapped={false} />
-      </mesh>
-      <mesh position={[-16.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[34, 0.08, 0.08]} />
-        <meshBasicMaterial color="#10ff70" toneMapped={false} />
-      </mesh>
-      <mesh position={[16.75, 5.95, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[34, 0.08, 0.08]} />
-        <meshBasicMaterial color="#10ff70" toneMapped={false} />
-      </mesh>
-
-      {/* Title */}
-      <Text
-        position={[0, 5.0, -16.5]}
-        fontSize={0.5}
-        color="#10ff70"
-        outlineWidth={0.015}
-        outlineColor="#10ff70"
-        material-toneMapped={false}
-      >
-        AGENTEN I ARBEID
-      </Text>
-
-      {/* ----------------- SUB-STATION 1: Center Giant PC ----------------- */}
-      <group position={[0, 0, -4]}>
-        {/* Pedestal */}
-        <RigidBody type="fixed" position={[0, 0.4, 0]}>
-          <mesh castShadow receiveShadow>
-            <boxGeometry args={[4, 0.8, 3]} />
-            <meshStandardMaterial color="#1f293d" metalness={0.8} roughness={0.2} />
+      {/* Asymmetrisk skråtak (shed-tak) (Y = 4.5 i øst, Y = 7.5 i vest) med integrert takvindu */}
+      <group position={[0, 6.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
+        {/* Vestlig solid del av taket */}
+        <RigidBody type="fixed" colliders="cuboid">
+          <mesh receiveShadow position={[-8, 0, 0]}>
+            <boxGeometry args={[2, 0.2, 18]} />
+            <meshStandardMaterial {...woodTextures} color="#c8a877" />
           </mesh>
         </RigidBody>
 
-        {/* Retro Computer Monitor */}
-        <mesh position={[0, 1.8, 0]} castShadow>
-          <boxGeometry args={[2.5, 2.0, 1.8]} />
-          <meshStandardMaterial color="#2d3748" metalness={0.7} roughness={0.3} />
-        </mesh>
-        {/* PC Screen */}
-        <mesh position={[0, 1.8, 0.91]}>
-          <planeGeometry args={[2.1, 1.6]} />
-          <meshStandardMaterial color="#10ff70" emissive="#10ff70" emissiveIntensity={0.6} roughness={0.1} />
-        </mesh>
-        {/* Glow point light */}
-        <pointLight position={[0, 1.8, 1.2]} intensity={1.5} color="#10ff70" distance={6} decay={2} />
-        
-        {/* Screen Text */}
-        <Text
-          position={[0, 1.8, 0.92]}
-          fontSize={0.15}
-          color="#000"
-          maxWidth={1.8}
-          textAlign="center"
-        >
-          {"[ AI WEB PORTAL ]\nOnline\nVenter på input..."}
-        </Text>
+        {/* Østlig solid del av taket */}
+        <RigidBody type="fixed" colliders="cuboid">
+          <mesh receiveShadow position={[2, 0, 0]}>
+            <boxGeometry args={[14, 0.2, 18]} />
+            <meshStandardMaterial {...woodTextures} color="#c8a877" />
+          </mesh>
+        </RigidBody>
 
-        {/* Audio Trigger Zone: Walk in front of the PC */}
-        <AudioZone
-          position={[0, 1, 1.5]}
-          size={[8, 4, 7]}
-          audioUrl="/tts/dagens_bruk.mp3"
-          subtitleUrl="/tts/dagens_bruk.json"
-        />
+        {/* Nord/Sør-rammer rundt takvinduet */}
+        <RigidBody type="fixed" colliders="cuboid">
+          <mesh receiveShadow position={[-6, 0, -8]}>
+            <boxGeometry args={[2, 0.2, 2]} />
+            <meshStandardMaterial {...woodTextures} color="#c8a877" />
+          </mesh>
+        </RigidBody>
+        <RigidBody type="fixed" colliders="cuboid">
+          <mesh receiveShadow position={[-6, 0, 8]}>
+            <boxGeometry args={[2, 0.2, 2]} />
+            <meshStandardMaterial {...woodTextures} color="#c8a877" />
+          </mesh>
+        </RigidBody>
+
+        {/* Takvindu glass (skylight) */}
+        <mesh position={[-6, 0, 0]}>
+          <boxGeometry args={[2, 0.1, 14]} />
+          <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.5} transparent roughness={0.05} />
+        </mesh>
       </group>
 
-      {/* ----------------- SUB-STATION 2: Claude Cowork (Left) ----------------- */}
-      <group position={[-6, 0, 2]}>
-        {/* Volumetric Cloud representation */}
-        <group position={[0, 3.5, 0]}>
-          {/* Main sphere */}
-          <mesh castShadow>
-            <sphereGeometry args={[0.8, 16, 16]} />
-            <meshStandardMaterial color="#f0efe6" roughness={0.9} emissive="#ff8c00" emissiveIntensity={0.2} />
+      {/* Bakvegg (Nord, z = -9) — lobby-døra */}
+      <RigidBody type="fixed" position={[0, 4, -9]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[18, 8, 0.4]} />
+          <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
+        </mesh>
+      </RigidBody>
+
+      {/* Frontvegg (Sør, z = 9) — døra videre */}
+      <RigidBody type="fixed" position={[0, 4, 9]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[18, 8, 0.4]} />
+          <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
+        </mesh>
+      </RigidBody>
+
+      {/* Høyre vegg (Øst, x = 9) */}
+      <RigidBody type="fixed" position={[9, 4, 0]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[0.4, 8, 18]} />
+          <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
+        </mesh>
+      </RigidBody>
+
+      {/* Venstre vegg (Vest, x = -9) med vindu og justert høyde for skråtak */}
+      <group position={[-9, 0, 0]}>
+        {/* Solide veggdeler rundt vinduet */}
+        <RigidBody type="fixed" position={[0, 4, -6.5]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[0.4, 8, 5]} />
+            <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
           </mesh>
-          {/* Supporting spheres to look like a cloud */}
-          <mesh position={[0.6, -0.2, 0.2]}>
-            <sphereGeometry args={[0.6, 16, 16]} />
-            <meshStandardMaterial color="#f0efe6" roughness={0.9} />
+        </RigidBody>
+        <RigidBody type="fixed" position={[0, 4, 6.5]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[0.4, 8, 5]} />
+            <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
           </mesh>
-          <mesh position={[-0.6, -0.1, -0.2]}>
-            <sphereGeometry args={[0.55, 16, 16]} />
-            <meshStandardMaterial color="#f0efe6" roughness={0.9} />
+        </RigidBody>
+        {/* Brystning under og overstykke over vinduet */}
+        <RigidBody type="fixed" position={[0, 0.75, 0]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[0.4, 1.5, 8]} />
+            <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
           </mesh>
-          
-          <Text
-            position={[0, 1.2, 0]}
-            fontSize={0.25}
-            color="#ff8c00"
-            outlineWidth={0.01}
-            outlineColor="#ff8c00"
-            material-toneMapped={false}
-          >
-            Claude Cowork
+        </RigidBody>
+        <RigidBody type="fixed" position={[0, 5.75, 0]}>
+          <mesh receiveShadow castShadow>
+            <boxGeometry args={[0.4, 3.5, 8]} />
+            <meshStandardMaterial color="#e6dbc4" roughness={0.95} metalness={0} />
+          </mesh>
+        </RigidBody>
+
+        {/* Glass */}
+        <RigidBody type="fixed" position={[0, 2.75, 0]}>
+          <mesh>
+            <boxGeometry args={[0.1, 2.5, 8]} />
+            <meshPhysicalMaterial color="#eaf6ff" transmission={0.85} opacity={1} transparent roughness={0.05} />
+          </mesh>
+        </RigidBody>
+        {/* Midtsprosse */}
+        <mesh position={[0, 2.75, 0]}>
+          <boxGeometry args={[0.15, 2.5, 0.15]} />
+          <meshStandardMaterial color="#5a5a5a" />
+        </mesh>
+
+        {/* Innfallende dagslys fra vinduet */}
+        <pointLight position={[2, 3, 0]} intensity={3.5} color="#fdf4e3" distance={14} decay={2} />
+      </group>
+
+      {/* West window backdrop (moved further back for better parallax) */}
+      <mesh position={[-16.5, 4.5, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[45, 30]} />
+        <meshBasicMaterial map={daytimeSkyTexture} toneMapped={false} />
+      </mesh>
+
+
+
+      {/* Diskré takpunkter som markerer den svingete stien (tilpasset det skrå taket) */}
+      {[
+        [1.0, -6.0],
+        [-1.0, -3.0],
+        [1.0, 0.0],
+        [-1.0, 3.0],
+        [-1.0, 6.0],
+      ].map(([x, z], idx) => {
+        const ceilingY = 6.0 - x / 6;
+        const y = ceilingY - 0.7;
+        return (
+          <pointLight key={idx} position={[x, y, z]} intensity={1.6} color="#fdf6e8" distance={7} decay={2} />
+        );
+      })}
+
+      {/* ---------- Platå (Y = 0.6) for stasjon 3 og 4 (Z = 0 til 9) ---------- */}
+      <RigidBody type="fixed" position={[0, 0.3, 4.5]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[18, 0.6, 9]} />
+          <meshStandardMaterial {...floorTextures} color="#c8a877" roughness={0.8} metalness={0} />
+        </mesh>
+      </RigidBody>
+
+      {/* 3 trinn som leder opp til platået (plassert rett før platået ved Z = 0) */}
+      {/* 3 trinn som leder opp til platået (visuals only) */}
+      {/* Trinn 1 */}
+      <mesh position={[0, 0.075, -0.9]} receiveShadow castShadow>
+        <boxGeometry args={[18, 0.15, 0.3]} />
+        <meshStandardMaterial {...floorTextures} color="#c8a877" roughness={0.8} />
+      </mesh>
+      {/* Trinn 2 */}
+      <mesh position={[0, 0.225, -0.6]} receiveShadow castShadow>
+        <boxGeometry args={[18, 0.30, 0.3]} />
+        <meshStandardMaterial {...floorTextures} color="#c8a877" roughness={0.8} />
+      </mesh>
+      {/* Trinn 3 */}
+      <mesh position={[0, 0.375, -0.3]} receiveShadow castShadow>
+        <boxGeometry args={[18, 0.45, 0.3]} />
+        <meshStandardMaterial {...floorTextures} color="#c8a877" roughness={0.8} />
+      </mesh>
+
+      {/* Invisible Slanted Ramp Collider for smooth platform entry */}
+      <RigidBody type="fixed" position={[0, 0.3, -0.45]} rotation={[Math.atan2(0.6, 0.9), 0, 0]}>
+        <CuboidCollider args={[9.0, 0.05, 0.541]} />
+      </RigidBody>
+
+      {/* ---------- Kunstverk ---------- */}
+      {/* 1. kontor_organizing.png henges over arkivskapene på Stasjon 2 */}
+      <group position={[-8.8, 2.8, -1.5]} rotation={[0, Math.PI / 2, 0]}>
+        <mesh castShadow>
+          <boxGeometry args={[3.2, 2.2, 0.08]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
+        </mesh>
+        <mesh position={[0, 0, 0.045]}>
+          <planeGeometry args={[3.0, 2.0]} />
+          <meshStandardMaterial map={textureOrganizing} roughness={0.3} />
+        </mesh>
+      </group>
+
+      {/* 2. kontor_pdf_data.png henges over Stasjon 3 på platåveggen */}
+      <group position={[8.8, 3.4, 1.5]} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh castShadow>
+          <boxGeometry args={[3.2, 2.2, 0.08]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
+        </mesh>
+        <mesh position={[0, 0, 0.045]}>
+          <planeGeometry args={[3.0, 2.0]} />
+          <meshStandardMaterial map={texturePdfData} roughness={0.3} />
+        </mesh>
+      </group>
+
+      {/* ===================================================================
+          STASJON 1 — hva_kan_agent_gjoere · "På dine filer"
+          Arbeidsplass med laptop + skrivebordslampe, høyre side.
+          =================================================================== */}
+      <group position={[4.5, 0, -4.5]}>
+        <Model id="metal_office_desk" position={[2.5, 0, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} solid />
+        <Model id="classic_laptop" position={[2.5, 1.1813, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
+        <Model id="desk_lamp_arm_01" position={[3.2, 1.1813, -0.9]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
+        <Model id="SchoolChair_01" position={[1.0, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} solid />
+        <pointLight position={[2.0, 1.25, -0.4]} intensity={2.2} color="#ffe6c0" distance={4} decay={2} />
+
+        {/* Flytende nummer + tittel over stien */}
+        <Billboard position={[-2.3, 3.0, 0]}>
+          <Text fontSize={0.45} color="#ffffff" anchorX="center">
+            1
           </Text>
-        </group>
-        
-        {/* Soft amber light from the cloud */}
-        <pointLight position={[0, 3, 0]} intensity={1.2} color="#ffaa44" distance={5} />
+          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
+            På dine filer
+          </Text>
+        </Billboard>
 
-        {/* Audio Trigger Zone: Walk under the Claude Cloud */}
         <AudioZone
-          position={[0, 1, 0]}
-          size={[7, 4, 7]}
-          audioUrl="/tts/claude_cowork.mp3"
-          subtitleUrl="/tts/claude_cowork.json"
+          position={[-2.3, 1, 0]}
+          size={[6, 4, 4]}
+          audioUrl="/tts/hva_kan_agent_gjoere.mp3"
+          subtitleUrl="/tts/hva_kan_agent_gjoere.json"
         />
       </group>
 
-      {/* ----------------- SUB-STATION 3: Terminal Server (Right) ----------------- */}
-      <group position={[6, 0, 2]}>
-        {/* Server Rack / Vertical Screen */}
-        <RigidBody type="fixed" position={[0, 1.8, 0]}>
-          <mesh castShadow receiveShadow>
-            <boxGeometry args={[1.5, 3.6, 0.8]} />
-            <meshStandardMaterial color="#0f172a" roughness={0.3} metalness={0.9} />
-          </mesh>
-          {/* Glowing terminal panels */}
-          <mesh position={[0, 0, 0.41]}>
-            <planeGeometry args={[1.2, 3.2]} />
-            <meshStandardMaterial color="#022c22" emissive="#059669" emissiveIntensity={0.5} roughness={0.1} />
-          </mesh>
-        </RigidBody>
+      {/* ===================================================================
+          STASJON 2 — fil_rydde_mappe · "Rydde en mappe"
+          Arkivskap med planten ved siden, venstre side.
+          =================================================================== */}
+      <group position={[-4.5, 0, -1.5]}>
+        <Model id="drawer_cabinet" position={[-2.5, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} solid />
+        <Model id="potted_plant_02" position={[-3.2, 0, -1.9]} rotation={[0, 0, 0]} scale={1.5} />
 
-        <pointLight position={[0, 1.8, 0.6]} intensity={1.0} color="#059669" distance={5} />
+        <Billboard position={[2.3, 3.5, 0]}>
+          <Text fontSize={0.45} color="#ffffff" anchorX="center">
+            2
+          </Text>
+          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
+            Rydde en mappe
+          </Text>
+        </Billboard>
 
-        {/* Terminal Header */}
-        <Text
-          position={[0, 3.8, 0]}
-          fontSize={0.25}
-          color="#059669"
-          outlineWidth={0.01}
-          outlineColor="#059669"
-          material-toneMapped={false}
-        >
-          Terminal vs Desktop
-        </Text>
-
-        <Text
-          position={[0, 1.8, 0.42]}
-          fontSize={0.1}
-          color="#10ff70"
-          maxWidth={1.1}
-          textAlign="left"
-        >
-          {"$ agy run dev\n> Installing tools...\n> Initializing sandbox...\n> Running checks...\n\n[PORT] 5173\n[STATUS] Connected"}
-        </Text>
-
-        {/* Audio Trigger Zone: Walk in front of the terminal server */}
         <AudioZone
-          position={[0, 1, 1.0]}
-          size={[7, 4, 7]}
-          audioUrl="/tts/terminal_vs_desktop.mp3"
-          subtitleUrl="/tts/terminal_vs_desktop.json"
+          position={[2.3, 1, 0]}
+          size={[6, 4, 4]}
+          audioUrl="/tts/fil_rydde_mappe.mp3"
+          subtitleUrl="/tts/fil_rydde_mappe.json"
         />
       </group>
 
-      {/* General Lights */}
-      <ambientLight intensity={0.15} />
-      <directionalLight position={[5, 10, 5]} intensity={0.4} castShadow />
+      {/* ===================================================================
+          STASJON 3 — fil_pdf_regneark · "30 PDF → 1 ark"
+          Arbeidsplass nummer to med laptop, høyre side. Plassert på platå (Y = 0.6)
+          =================================================================== */}
+      <group position={[4.5, 0.6, 1.5]}>
+        <Model id="metal_office_desk" position={[2.5, 0, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} solid />
+        <Model id="classic_laptop" position={[2.5, 1.1813, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
+        <Model id="desk_lamp_arm_01" position={[3.2, 1.1813, 0.9]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
+        <Model id="modern_arm_chair_01" position={[1.0, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} solid />
+        <pointLight position={[2.0, 1.25, 0.4]} intensity={2.2} color="#ffe6c0" distance={4} decay={2} />
 
-      {/* Portal to Room 3 */}
-      <Portal position={[0, 0, -16.5]} room="room3" label="Til Rom 3: Tilkoblinger" color="#3080ff" />
+        <Billboard position={[-2.3, 2.4, 0]}>
+          <Text fontSize={0.45} color="#ffffff" anchorX="center">
+            3
+          </Text>
+          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
+            30 PDF → 1 ark
+          </Text>
+        </Billboard>
+
+        <AudioZone
+          position={[-2.3, 1, 0]}
+          size={[6, 4, 4]}
+          audioUrl="/tts/fil_pdf_regneark.mp3"
+          subtitleUrl="/tts/fil_pdf_regneark.json"
+        />
+      </group>
+
+      {/* ===================================================================
+          STASJON 4 — tusen_problemer · "Det forenende grepet"
+          Bokhylle med oppslagsverk, venstre side. Plassert på platå (Y = 0.6)
+          =================================================================== */}
+      <group position={[-4.5, 0.6, 4.5]}>
+        <Model id="wooden_bookshelf_worn" position={[-2.5, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} solid />
+        <Model id="book_encyclopedia_set_01" position={[-2.3, 1.65, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} />
+        <Model id="potted_plant_02" position={[-2.9, 0, 2.0]} rotation={[0, 0, 0]} scale={1.5} />
+
+        <Billboard position={[2.3, 2.9, 0]}>
+          <Text fontSize={0.45} color="#ffffff" anchorX="center">
+            4
+          </Text>
+          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
+            Det forenende grepet
+          </Text>
+        </Billboard>
+
+        <AudioZone
+          position={[2.3, 1, 0]}
+          size={[6, 4, 4]}
+          audioUrl="/tts/tusen_problemer.mp3"
+          subtitleUrl="/tts/tusen_problemer.json"
+        />
+      </group>
+
+      {/* ---------- Liv i hjørnene ---------- */}
+      <Model id="potted_plant_01" position={[7.5, 0, -7.5]} scale={1.5} />
+      <Model id="potted_plant_01" position={[7.5, 0.6, 7.5]} scale={1.5} />
+
+      {/* ---------- Dører ---------- */}
+      {/* TILBAKE til stua (bakvegg, bakkeplan) */}
+      <Portal position={[0, 0, -7.0]} room="lobby" label="Tilbake til stua" color="#ff4a4a" />
+      {/* VIDERE til Postrommet (frontvegg, hevet til platå Y = 0.6) */}
+      <Portal position={[0, 0.6, 7.0]} rotation={[0, Math.PI, 0]} room="room3" label="Postrommet" color="#3aa0ff" />
+
+      {/* ---------- Belysning: lyst, mykt dagslys ---------- */}
+      <ambientLight intensity={0.02} color="#fff3e0" />
+      <hemisphereLight args={["#fdfbf5", "#8a7a62", 0.03]} />
+      <directionalLight
+        position={[-8, 12, 4]}
+        intensity={2.2}
+        color="#fff1da"
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-far={45}
+        shadow-camera-left={-14}
+        shadow-camera-right={14}
+        shadow-camera-top={14}
+        shadow-camera-bottom={-14}
+        shadow-bias={-0.0005}
+      />
+
+      {/* ---------- 3 Footballs inside Room 2 ---------- */}
+      <Football position={[-2.5, 0.5, -2.5]} />
+      <Football position={[2.5, 1.1, 2.5]} />
+      <Football position={[0.0, 1.1, 1.0]} />
+
+      {/* Decorative items */}
+      <Model id="wall_clock_1k" position={[0, 4.5, -8.75]} rotation={[0, 0, 0]} scale={1.8} solid={false} />
+      <Model id="ceramic_vase_01_1k" position={[-8.9, 1.51, 1.0]} rotation={[0, 0, 0]} scale={1.5} solid={false} />
     </group>
   );
 };
+
+useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_diff_1k.jpg");
+useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_nor_gl_1k.jpg");
+useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_rough_1k.jpg");
+useTexture.preload("/artwork/kontor_organizing.png");
+useTexture.preload("/artwork/kontor_pdf_data.png");
+useTexture.preload("/textures/fine_grained_wood/diff.jpg");
+useTexture.preload("/textures/fine_grained_wood/nor.jpg");
+useTexture.preload("/textures/fine_grained_wood/rough.jpg");
+useTexture.preload("/artwork/daytime_sky.png");

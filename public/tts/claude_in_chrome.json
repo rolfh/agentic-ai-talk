@@ -1,0 +1,32 @@
+[
+  {
+    "start": 0.0,
+    "end": 5.1,
+    "text": "Og med Claude in Chrome kan agenten styre nettleseren toveis:"
+  },
+  {
+    "start": 5.46,
+    "end": 9.72,
+    "text": "se hva som skjer på skjermen, fylle skjema, trykke knapper –"
+  },
+  {
+    "start": 10.32,
+    "end": 11.94,
+    "text": "bruke nettsider sånn du gjør."
+  },
+  {
+    "start": 12.62,
+    "end": 17.58,
+    "text": "Tenk deg en markedsplan i Excel som ellers skulle punches inn i et system manuelt."
+  },
+  {
+    "start": 18.08,
+    "end": 20.48,
+    "text": "I stedet for en hel dag med copy-paste,"
+  },
+  {
+    "start": 20.48,
+    "end": 23.62,
+    "text": "lar du agenten lese arket og fylle inn for deg."
+  }
+]

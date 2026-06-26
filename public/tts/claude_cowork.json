@@ -1,17 +1,27 @@
 [
   {
     "start": 0.0,
-    "end": 3.86,
-    "text": "Claude Desktop har en modus som heter Cowork."
+    "end": 5.12,
+    "text": "Claude Code kjører i en terminal, og det er en barriere for noen."
   },
   {
-    "start": 4.38,
-    "end": 9.3,
-    "text": "Den er laget for bruk utover koding, fortsatt med tilgang til de lokale filene dine."
+    "start": 5.6,
+    "end": 11.94,
+    "text": "Men inne i Claude Desktop finnes en modus som heter Cowork – ved siden av Chat og Code."
   },
   {
-    "start": 10.12,
-    "end": 20.3,
-    "text": "Cowork gjør det samme som Claude Code, men med et brukergrensesnitt laget for organisering av filer, behandling av data, lage presentasjoner, etc."
+    "start": 12.86,
+    "end": 17.06,
+    "text": "Den er laget nettopp for å jobbe agentisk med vanlige kontorfiler –"
+  },
+  {
+    "start": 18.26,
+    "end": 21.84,
+    "text": "Word, Excel, PowerPoint, PDF – uten kommandolinje."
+  },
+  {
+    "start": 22.62,
+    "end": 27.66,
+    "text": "Samme idé, mykere inngang. Det er trolig her du ville begynt."
   }
 ]

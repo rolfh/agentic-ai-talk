@@ -1,7 +1,22 @@
 [
   {
     "start": 0.0,
-    "end": 17.94,
-    "text": "Agents.md: Noen ting gjelder for alle oppgaver. Hvordan prosjektet du jobber med ser ut, hvordan du ønsker at koden skal skrives, etc. Agents.md er en markdown-fil som leses ved oppstart av alle agenter."
+    "end": 2.5,
+    "text": "Noen ting gjelder for alle oppgaver:"
+  },
+  {
+    "start": 3.02,
+    "end": 8.34,
+    "text": "hvordan prosjektet ser ut, hvilken tone du vil ha, hvordan ting skal gjøres."
+  },
+  {
+    "start": 9.1,
+    "end": 16.12,
+    "text": "AGENTS.md er en enkel tekstfil med slike føringer som agenten leser hver gang den starter –"
+  },
+  {
+    "start": 16.78,
+    "end": 19.06,
+    "text": "grunnmuren som gjelder alt arbeid."
   }
 ]

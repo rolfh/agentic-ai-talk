@@ -1,0 +1,47 @@
+[
+  {
+    "start": 0.0,
+    "end": 2.84,
+    "text": "Alle har en mappe som ser sånn ut:"
+  },
+  {
+    "start": 3.26,
+    "end": 6.0,
+    "text": "to hundre filer med navn ingen forstår –"
+  },
+  {
+    "start": 6.54,
+    "end": 9.84,
+    "text": "kampanje_final_FINAL_v3."
+  },
+  {
+    "start": 10.7,
+    "end": 13.36,
+    "text": "I stedet for å døpe om dem én etter én,"
+  },
+  {
+    "start": 13.36,
+    "end": 14.9,
+    "text": "peker du agenten på mappa og sier:"
+  },
+  {
+    "start": 15.38,
+    "end": 18.44,
+    "text": "gi alt konsistente navn etter dette mønsteret,"
+  },
+  {
+    "start": 18.44,
+    "end": 20.26,
+    "text": "og sorter i undermapper."
+  },
+  {
+    "start": 21.1,
+    "end": 24.62,
+    "text": "Den leser hver fil, finner ut hva den er, og rydder."
+  },
+  {
+    "start": 25.06,
+    "end": 28.7,
+    "text": "Det du ville brukt en formiddag på, tar minutter."
+  }
+]

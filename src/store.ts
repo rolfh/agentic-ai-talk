@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 interface AppState {
-  currentRoom: 'lobby' | 'room2' | 'room3' | 'room4';
+  currentRoom: 'outside' | 'lobby' | 'room2' | 'room3' | 'room4';
   setRoom: (room: AppState['currentRoom']) => void;
   subtitle: string | null;
   setSubtitle: (subtitle: string | null) => void;
@@ -10,7 +10,7 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set) => ({
-  currentRoom: 'lobby',
+  currentRoom: 'outside',
   setRoom: (room) => set({ currentRoom: room }),
   subtitle: null,
   setSubtitle: (subtitle) => set({ subtitle }),

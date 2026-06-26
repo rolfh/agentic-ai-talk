@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "/Users/rolf/.nvm/versions/node/v22.23.1/bin/npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--user-data-dir=/Users/rolf/.gemini/antigravity-cli/scratch/chrome-profile"
+      ],
+      "env": {
+        "PATH": "/Users/rolf/.nvm/versions/node/v22.23.1/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      }
+    }
+  }
+}

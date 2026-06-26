@@ -1,67 +1,32 @@
 [
   {
     "start": 0.0,
-    "end": 2.4,
-    "text": "Hva kan en agent gjøre for deg?"
+    "end": 3.42,
+    "text": "Tenk deg at du har mange filer med data du vil ut."
   },
   {
-    "start": 3.5,
-    "end": 7.18,
-    "text": "Sett at du har mange filer som inneholder data du ønsker."
+    "start": 4.16,
+    "end": 7.72,
+    "text": "En utvikler ville skrevet litt kode for å hente og formatere det –"
   },
   {
-    "start": 7.94,
-    "end": 12.7,
-    "text": "For å få tak i dataen må den letes fram, og formateres rett."
+    "start": 8.14,
+    "end": 11.46,
+    "text": "men du har kanskje aldri installert Node eller Python."
   },
   {
-    "start": 13.24,
-    "end": 16.24,
-    "text": "En utvikler ville skrevet litt kode for å løse det,"
+    "start": 12.26,
+    "end": 14.28,
+    "text": "En agent tar hele den biten:"
   },
   {
-    "start": 16.52,
-    "end": 20.6,
-    "text": "men du har sikkert aldri installert Node eller Python,"
+    "start": 14.92,
+    "end": 21.24,
+    "text": "den installerer det som trengs, skriver koden, kjører den, og sjekker at resultatet ble riktig."
   },
   {
-    "start": 21.06,
-    "end": 23.54,
-    "text": "så å be ChatGPT om å skrive kode for deg"
-  },
-  {
-    "start": 23.86,
-    "end": 25.52,
-    "text": "har kanskje ikke virket som et alternativ."
-  },
-  {
-    "start": 26.52,
-    "end": 30.0,
-    "text": "Men en agent kan ta kontroll på PC-en din,"
-  },
-  {
-    "start": 30.0,
-    "end": 33.44,
-    "text": "og installere det du trenger, skrive koden,"
-  },
-  {
-    "start": 34.0,
-    "end": 37.14,
-    "text": "kjøre koden, og verifisere at det ble rett."
-  },
-  {
-    "start": 37.84,
-    "end": 41.519999999999996,
-    "text": "Den kan finne ut alt den trenger å vite om PC-en din, filene dine,"
-  },
-  {
-    "start": 42.4,
-    "end": 46.08,
-    "text": "den har tilgang på nettet og potensialet for full tilgang."
-  },
-  {
-    "start": 47.02,
-    "end": 50.9,
-    "text": "Agenten kan kjøre i gang en nettleser og gjøre oppgaver der også."
+    "start": 21.92,
+    "end": 26.46,
+    "text": "Du peker på filene, beskriver hva du vil ha ut, og lar den gjøre mellomstegene."
   }
 ]

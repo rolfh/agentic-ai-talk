@@ -1,17 +1,12 @@
 [
   {
     "start": 0.0,
-    "end": 2.06,
-    "text": "Hvordan prompte en agent."
+    "end": 5.76,
+    "text": "Husk at en språkmodell sjelden utfordrer deg med mindre du ber den om det."
   },
   {
-    "start": 2.74,
-    "end": 7.18,
-    "text": "Husk at en LLM sjelden utfordrer deg med mindre du ber den om det."
-  },
-  {
-    "start": 7.98,
-    "end": 13.7,
-    "text": "Vær derfor tydelig i kommunikasjonen din, men spesifiser gjerne når noe er åpent for tolkning."
+    "start": 6.48,
+    "end": 12.8,
+    "text": "Vær derfor tydelig i kommunikasjonen din – men si gjerne ifra når noe er åpent for tolkning."
   }
 ]

@@ -1,6 +1,30 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import type { IntersectionEnterPayload, IntersectionExitPayload } from "@react-three/rapier";
 import { useStore } from "../store";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+
+const glowVert = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const glowFrag = /* glsl */ `
+  uniform float uTime;
+  uniform float uActive;
+  varying vec2 vUv;
+  void main() {
+    float y = vUv.y;
+    float alpha = smoothstep(0.0, 0.25, y) * smoothstep(1.0, 0.45, y);
+    float pulse = 0.55 + 0.45 * sin(uTime * (2.2 + uActive * 4.5) + y * 4.0);
+    vec3 baseColor = mix(vec3(0.85, 0.82, 0.78), vec3(0.25, 0.65, 1.0), uActive);
+    gl_FragColor = vec4(baseColor * (1.2 + uActive * 1.8), alpha * pulse * (0.08 + uActive * 0.42));
+  }
+`;
 
 interface SubtitleSegment {
   start: number;
@@ -23,6 +47,21 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
   const [subtitles, setSubtitles] = useState<SubtitleSegment[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<number | null>(null);
+
+  const glowUniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uActive: { value: 0 },
+    }),
+    []
+  );
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    glowUniforms.uTime.value = t;
+    const isActive = activeAudio && activeAudio === audioRef.current;
+    glowUniforms.uActive.value = THREE.MathUtils.lerp(glowUniforms.uActive.value, isActive ? 1.0 : 0.0, 0.1);
+  });
 
   // Load subtitles JSON
   useEffect(() => {
@@ -112,8 +151,9 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
     }
   };
 
-  // Convert size dimensions to half-extents
-  const halfExtents = [size[0] / 2, size[1] / 2, size[2] / 2] as [number, number, number];
+  // Convert size dimensions to half-extents, overriding height (Y) to 50.0 (100m total height)
+  // to ensure player triggers the zone even when jumping or flying high.
+  const halfExtents = [size[0] / 2, 50.0, size[2] / 2] as [number, number, number];
 
   return (
     <group>
@@ -122,18 +162,36 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
           args={halfExtents}
           position={position}
           sensor
-          onIntersectionEnter={handleEnter}
-          onIntersectionExit={handleExit}
+          onIntersectionEnter={(event: IntersectionEnterPayload) => {
+            if (event.other.rigidBodyObject?.name === "player") {
+              handleEnter();
+            }
+          }}
+          onIntersectionExit={(event: IntersectionExitPayload) => {
+            if (event.other.rigidBodyObject?.name === "player") {
+              handleExit();
+            }
+          }}
         />
       </RigidBody>
-      {/* Visual ground marker for the AudioZone bounds */}
-      <mesh position={[position[0], 0.05, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+      {/* Visual ground marker for the AudioZone bounds — simple, clean flat overlay */}
+      <mesh position={[position[0], 0.02, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[size[0], size[2]]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.03} depthWrite={false} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.015} depthWrite={false} />
       </mesh>
-      <mesh position={[position[0], 0.06, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[size[0], size[2]]} />
-        <meshBasicMaterial color="#aaaaaa" transparent opacity={0.15} wireframe depthWrite={false} />
+      
+      {/* Glowing pulsing flame-like pillar at the center of the AudioZone */}
+      <mesh position={[position[0], 0.6, position[2]]}>
+        <cylinderGeometry args={[0.08, 0.25, 1.2, 16, 1, true]} />
+        <shaderMaterial
+          vertexShader={glowVert}
+          fragmentShader={glowFrag}
+          uniforms={glowUniforms}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+        />
       </mesh>
     </group>
   );

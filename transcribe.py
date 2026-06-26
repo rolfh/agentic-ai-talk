@@ -7,7 +7,7 @@ def transcribe_audio():
     print("Loading Whisper model...")
     model = whisper.load_model("base")
     
-    audio_dir = "/Users/rolfhammerstad/GitHub/agentic-ai-talk/public/tts"
+    audio_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public", "tts")
     files = [f for f in os.listdir(audio_dir) if f.endswith(".mp3")]
     
     print(f"Found {len(files)} audio files to transcribe.")
