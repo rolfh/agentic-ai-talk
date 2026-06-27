@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from "react";
-import { useGLTF, Text, Billboard } from "@react-three/drei";
+import { useGLTF, Html } from "@react-three/drei";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
@@ -8,6 +8,35 @@ import { Portal } from "./Portal";
 import { Model } from "./Model";
 import { Football } from "./Football";
 import { AudioZone } from "./AudioZone";
+
+interface StationLabelProps {
+  position: [number, number, number];
+  number?: string | number;
+  label: string;
+}
+
+const StationLabel = ({ position, number, label }: StationLabelProps) => {
+  return (
+    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
+      <div style={{
+        fontFamily: "'Instrument Serif', serif",
+        color: "white",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        minWidth: "300px",
+        padding: "6px 12px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        textAlign: "center",
+        pointerEvents: "none",
+        userSelect: "none",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
+      }}>
+        {number && <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>}
+        <div style={{ fontSize: "11px", marginTop: number ? "2px" : "0px", letterSpacing: "0.03em" }}>{label}</div>
+      </div>
+    </Html>
+  );
+};
 
 /**
  * Tree model with roughness adjustment for realistic PBR shading.
@@ -325,15 +354,7 @@ export const Outside = () => {
         subtitleUrl="/tts/stua_intro.json"
       />
       {/* Station 1 billboarded text */}
-      <Billboard position={[0.8, 3.5, 25.0]}>
-        <Text
-          fontSize={0.25}
-          color="#ffffff"
-          anchorX="center"
-        >
-          Velkommen
-        </Text>
-      </Billboard>
+      <StationLabel position={[0.8, 3.5, 25.0]} label="Velkommen" />
 
       {/* ---------- Lights ---------- */}
       <ambientLight intensity={0.02} color="#1a1c2e" />

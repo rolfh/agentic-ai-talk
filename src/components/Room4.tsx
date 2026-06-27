@@ -1,12 +1,41 @@
 import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, Text, Billboard } from "@react-three/drei";
+import { useTexture, Text, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Portal } from "./Portal";
 import { Football } from "./Football";
+
+interface StationLabelProps {
+  position: [number, number, number];
+  number?: string | number;
+  label: string;
+}
+
+const StationLabel = ({ position, number, label }: StationLabelProps) => {
+  return (
+    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
+      <div style={{
+        fontFamily: "'Instrument Serif', serif",
+        color: "white",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        minWidth: "300px",
+        padding: "6px 12px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        textAlign: "center",
+        pointerEvents: "none",
+        userSelect: "none",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
+      }}>
+        {number && <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>}
+        <div style={{ fontSize: "11px", marginTop: number ? "2px" : "0px", letterSpacing: "0.03em" }}>{label}</div>
+      </div>
+    </Html>
+  );
+};
 
 /**
  * BIBLIOTEKET — lun lesesal.
@@ -582,23 +611,7 @@ export const Room4 = () => {
       {STATIONS.map((s) => (
         <group key={s.n} position={s.pos}>
           {/* Flytende nummer + tittel */}
-          <Billboard position={[0, 3.5, 0]}>
-            <Text
-              fontSize={0.45}
-              color="#ffffff"
-              anchorX="center"
-            >
-              {s.n}
-            </Text>
-            <Text
-              position={[0, -0.4, 0]}
-              fontSize={0.22}
-              color="#ffffff"
-              anchorX="center"
-            >
-              {s.title}
-            </Text>
-          </Billboard>
+          <StationLabel position={[0, 3.5, 0]} number={s.n} label={s.title} />
           {/* Liten varm markør på gulvet */}
           <pointLight position={[0, 1.6, 0]} intensity={1.4} color="#ffcaa0" distance={4.5} decay={2} />
 
@@ -614,19 +627,19 @@ export const Room4 = () => {
       {/* ---------- Dører ---------- */}
       {/* TILBAKE til postrommet */}
       <Portal
-        position={[-3, 0, 8.6]}
+        position={[-3, 0, 7.5]}
         rotation={[0, Math.PI, 0]}
         room="room3"
         label="Tilbake til postrommet"
         color="#ff4a4a"
       />
-      {/* HJEM til stua */}
+      {/* HJEM til stua (nå grønn, går til startsiden ute) */}
       <Portal
-        position={[3, 0, 8.6]}
+        position={[3, 0, 7.5]}
         rotation={[0, Math.PI, 0]}
-        room="lobby"
-        label="Hjem til stua"
-        color="#ff4a4a"
+        room="outside"
+        label="Avslutt og gå ut"
+        color="#2eff7c"
       />
 
       {/* ---------- Belysning (varm og myk) ---------- */}

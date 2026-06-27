@@ -1,12 +1,41 @@
 import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, Text, Billboard } from "@react-three/drei";
+import { useTexture, useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 import { Portal } from "./Portal";
 import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Football } from "./Football";
+
+interface StationLabelProps {
+  position: [number, number, number];
+  number?: string | number;
+  label: string;
+}
+
+const StationLabel = ({ position, number, label }: StationLabelProps) => {
+  return (
+    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
+      <div style={{
+        fontFamily: "'Instrument Serif', serif",
+        color: "white",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        minWidth: "300px",
+        padding: "6px 12px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        textAlign: "center",
+        pointerEvents: "none",
+        userSelect: "none",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
+      }}>
+        {number && <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>}
+        <div style={{ fontSize: "11px", marginTop: number ? "2px" : "0px", letterSpacing: "0.03em" }}>{label}</div>
+      </div>
+    </Html>
+  );
+};
 
 export const Lobby = () => {
   // Load laminate floor textures (gir et varmt tregulv) — BEHOLDT
@@ -39,10 +68,29 @@ export const Lobby = () => {
   }, [floorTextures, wallTextures]);
 
   const textureWelkommen = useTexture("/artwork/stua_welkommen.png");
-  const textureCowork = useTexture("/artwork/stua_cowork.png");
+  const textureCowork = useTexture("/artwork/claude_cowork.jpg");
+  const elephantGLTF = useGLTF("/models/elephant.glb");
+
+  const chessTarget = useMemo(() => {
+    const obj = new THREE.Object3D();
+    obj.position.set(-4.5, 0.73, -1.3);
+    return obj;
+  }, []);
+
+  const elephantCloned = useMemo(() => {
+    const clone = elephantGLTF.scene.clone();
+    clone.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    return clone;
+  }, [elephantGLTF]);
 
   return (
     <group>
+      <primitive object={chessTarget} />
       {/* Tregulv (18x18) — BEHOLDT */}
       <RigidBody type="fixed" position={[0, -0.1, 0]}>
         <mesh receiveShadow>
@@ -216,26 +264,95 @@ export const Lobby = () => {
         </mesh>
       </group>
 
-      {/* 2. stua_cowork.png henges over Cowork-området suspended fra det høye taket */}
-      <group position={[0, 3.6, -1.5]} rotation={[0, 0, 0]}>
+      {/* Lamp over stua_welkommen */}
+      <mesh position={[-8.8, 3.9, -3.8]}>
+        <boxGeometry args={[0.4, 0.05, 0.05]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <mesh position={[-8.6, 3.85, -3.8]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <pointLight position={[-8.6, 3.7, -3.8]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+
+      {/* 2. claude_cowork picture on north wall (doubled in size) */}
+      <group position={[0, 5.2, -8.8]} rotation={[0, 0, 0]}>
         <mesh castShadow>
-          <boxGeometry args={[3.2, 2.2, 0.08]} />
+          <boxGeometry args={[6.4, 4.4, 0.08]} />
           <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
         </mesh>
         <mesh position={[0, 0, 0.045]}>
-          <planeGeometry args={[3.0, 2.0]} />
+          <planeGeometry args={[6.0, 4.0]} />
           <meshStandardMaterial map={textureCowork} roughness={0.3} />
         </mesh>
       </group>
-      {/* Opphengskabler for det hengende bildet */}
-      <mesh position={[-1.0, 6.3, -1.5]}>
-        <boxGeometry args={[0.02, 5.4, 0.02]} />
-        <meshStandardMaterial color="#333333" />
+
+      {/* Lamp over screenshot painting */}
+      <mesh position={[0, 6.6, -8.8]}>
+        <boxGeometry args={[0.05, 0.05, 0.4]} />
+        <meshStandardMaterial color="#1a1a1a" />
       </mesh>
-      <mesh position={[1.0, 6.3, -1.5]}>
-        <boxGeometry args={[0.02, 5.4, 0.02]} />
-        <meshStandardMaterial color="#333333" />
+      <mesh position={[0, 6.55, -8.6]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
+        <meshStandardMaterial color="#1a1a1a" />
       </mesh>
+      <pointLight position={[0, 6.4, -8.6]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+
+      {/* Floor Lamp pointing at Chess Board */}
+      <group position={[-5.8, 0, -2.5]}>
+        {/* Base */}
+        <mesh position={[0, 0.025, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
+        </mesh>
+        {/* Vertical Pole */}
+        <mesh position={[0, 1.0, 0]} castShadow>
+          <cylinderGeometry args={[0.015, 0.015, 2.0, 16]} />
+          <meshStandardMaterial color="#c5a059" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Angled Arm and Lamp Shade (nested inside a rotated joint group to prevent disjoint parts) */}
+        <group position={[0, 2.0, 0]} rotation={[0.4, Math.PI / 4, -0.6]}>
+          {/* Angled Arm */}
+          <mesh position={[0, 0.5, 0]} castShadow>
+            <cylinderGeometry args={[0.012, 0.012, 1.0, 16]} />
+            <meshStandardMaterial color="#c5a059" metalness={0.8} roughness={0.2} />
+          </mesh>
+          {/* Lamp Shade at the end of the arm */}
+          <group position={[0, 1.0, 0]} rotation={[0, 0, 0.4]}>
+            <mesh castShadow>
+              <cylinderGeometry args={[0.05, 0.12, 0.22, 32]} />
+              <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
+            </mesh>
+            {/* Glowing Emissive Light Bulb inside the shade */}
+            <mesh position={[0, -0.08, 0]}>
+              <sphereGeometry args={[0.035, 16, 16]} />
+              <meshStandardMaterial color="#ffffff" emissive="#ffebc2" emissiveIntensity={8} toneMapped={false} />
+            </mesh>
+            {/* Spotlight pointing at chessboard */}
+            <spotLight
+              target={chessTarget}
+              position={[0, -0.06, 0]}
+              angle={0.45}
+              penumbra={0.7}
+              intensity={20}
+              color="#ffebc2"
+              distance={6}
+              decay={1.8}
+              castShadow
+            />
+          </group>
+        </group>
+      </group>
+
+      {/* 3D Elephant Model in the corner */}
+      <RigidBody type="fixed" colliders="cuboid">
+        <primitive 
+          object={elephantCloned} 
+          position={[-7.3, 0, 6.8]} 
+          rotation={[0, Math.PI / 4, 0]} 
+          scale={1.0} 
+        />
+      </RigidBody>
 
       {/* ---------- Stue-vignett (flyttet til venstre og forstørret) ---------- */}
       {/* Sofa vendt mot vinduet (sør), lenestoler rundt sofabordet */}
@@ -283,11 +400,7 @@ export const Lobby = () => {
         audioUrl="/tts/claude_cowork.mp3"
         subtitleUrl="/tts/claude_cowork.json"
       />
-      <Billboard position={[0, 3.5, -0.5]}>
-        <Text fontSize={0.25} color="#ffffff" anchorX="center">
-          Cowork
-        </Text>
-      </Billboard>
+      <StationLabel position={[0, 3.5, -0.5]} label="Cowork" />
 
       {/* VIDERE-DØR til Kontoret — fremhevet med varmt spotlys + dørmatte */}
       <Portal position={[0, 0, -7.0]} room="room2" label="Kontoret" color="#3aa0ff" />
@@ -336,7 +449,8 @@ useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_diff_1k.jpg");
 useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_nor_gl_1k.jpg");
 useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_rough_1k.jpg");
 useTexture.preload("/artwork/stua_welkommen.png");
-useTexture.preload("/artwork/stua_cowork.png");
+useTexture.preload("/artwork/claude_cowork.jpg");
+useGLTF.preload("/models/elephant.glb");
 useTexture.preload("/textures/clay_plaster/diff.jpg");
 useTexture.preload("/textures/clay_plaster/nor.jpg");
 useTexture.preload("/textures/clay_plaster/rough.jpg");

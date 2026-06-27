@@ -28,6 +28,9 @@ const viewPresets = [
   { position: [-5, 4, -4], lookAt: [4, 1, 2], room: "room2" },
   { position: [6, 5, 6], lookAt: [-4, 2, -3], room: "room3" },
   { position: [0, 6, 5], lookAt: [0, 2, -1], room: "room4" },
+  { position: [1, 2.5, 2.5], lookAt: [-4.5, 1, -1.3], room: "lobby" }, // View 6: Chess board & floor lamp
+  { position: [-3, 1.5, 7.5], lookAt: [-7.5, 0.8, 7.2], room: "lobby" },  // View 7: Elephant in the corner
+  { position: [-2.8, 1.6, -0.2], lookAt: [-5.8, 1.2, -2.5], room: "lobby" }, // View 8: Close-up of floor lamp
 ] as const;
 
 function SpectatorCamera({ viewIndex }: { viewIndex: number }) {
@@ -148,8 +151,11 @@ export default function App() {
       
       {/* Subtitles HUD Overlay */}
       {subtitle && (
-        <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-40 max-w-2xl text-center px-6 py-3 bg-black/75 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl pointer-events-none transition-all duration-200">
-          <p className="text-lg md:text-xl font-medium text-white tracking-wide leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+        <div 
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40 max-w-2xl text-center px-5 py-2.5 bg-black/20 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl pointer-events-none transition-all duration-200"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          <p className="text-base md:text-lg text-white tracking-wide leading-relaxed">
             {subtitle}
           </p>
         </div>

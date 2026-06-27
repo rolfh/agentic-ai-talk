@@ -1,12 +1,41 @@
 import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, Text, Billboard } from "@react-three/drei";
+import { useTexture, Text, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Portal } from "./Portal";
 import { Football } from "./Football";
+
+interface StationLabelProps {
+  position: [number, number, number];
+  number: string | number;
+  label: string;
+}
+
+const StationLabel = ({ position, number, label }: StationLabelProps) => {
+  return (
+    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
+      <div style={{
+        fontFamily: "'Instrument Serif', serif",
+        color: "white",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        minWidth: "300px",
+        padding: "6px 12px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        textAlign: "center",
+        pointerEvents: "none",
+        userSelect: "none",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
+      }}>
+        <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>
+        <div style={{ fontSize: "11px", marginTop: "2px", letterSpacing: "0.03em" }}>{label}</div>
+      </div>
+    </Html>
+  );
+};
 
 /**
  * POSTROMMET — «den strekker seg ut».
@@ -33,6 +62,7 @@ export const Room3 = () => {
 
   const mcpTexture = useTexture("/artwork/postrom_mcp.png");
   const browserTexture = useTexture("/artwork/postrom_browser_steering.png");
+  const mcpServersTexture = useTexture("/artwork/mcp_servers.jpg");
 
   useMemo(() => {
     Object.values(floorTextures).forEach((texture) => {
@@ -59,65 +89,65 @@ export const Room3 = () => {
       </RigidBody>
 
       {/* Tak */}
-      <RigidBody type="fixed" position={[0, 6.1, 0]}>
+      <RigidBody type="fixed" position={[0, 12.1, 0]}>
         <mesh receiveShadow>
-          <boxGeometry args={[18, 0.2, 18]} />
-          <meshStandardMaterial color="#cdbfa6" roughness={1} />
+          <boxGeometry args={[20, 0.2, 20]} />
+          <meshStandardMaterial color="#181614" roughness={1} />
         </mesh>
       </RigidBody>
 
       {/* Nordvegg (z = -9) — bak videre-døra (kun vestre del er synlig pga L-shape) */}
-      <RigidBody type="fixed" position={[-3.5, 3, -9]}>
+      <RigidBody type="fixed" position={[-3.5, 6.0, -9]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[11, 6, 0.4]} />
+          <boxGeometry args={[11, 12, 0.4]} />
           <meshStandardMaterial {...wallTextures} color="#dcccb0" />
         </mesh>
       </RigidBody>
 
       {/* Sørvegg (z = +9) — bak tilbake-døra */}
-      <RigidBody type="fixed" position={[0, 3, 9]}>
+      <RigidBody type="fixed" position={[0, 6.0, 9]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[18, 6, 0.4]} />
+          <boxGeometry args={[18, 12, 0.4]} />
           <meshStandardMaterial {...wallTextures} color="#dcccb0" />
         </mesh>
       </RigidBody>
 
       {/* Vestvegg (x = -9) — stasjonsvegg */}
-      <RigidBody type="fixed" position={[-9, 3, 0]}>
+      <RigidBody type="fixed" position={[-9, 6.0, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6, 18]} />
+          <boxGeometry args={[0.4, 12, 18]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
 
       {/* ---------------- L-shape Inner Partition Walls ---------------- */}
       {/* Partition wall blocking northeast quadrant: Z from -9 to -2 at X = 2.0 */}
-      <RigidBody type="fixed" position={[2.0, 3.0, -5.5]}>
+      <RigidBody type="fixed" position={[2.0, 6.0, -5.5]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6.0, 7.0]} />
+          <boxGeometry args={[0.4, 12.0, 7.0]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
       {/* Partition wall blocking northeast quadrant: X from 2 to 9 at Z = -2.0 */}
-      <RigidBody type="fixed" position={[5.5, 3.0, -2.0]}>
+      <RigidBody type="fixed" position={[5.5, 6.0, -2.0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[7.0, 6.0, 0.4]} />
+          <boxGeometry args={[7.0, 12.0, 0.4]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
 
       {/* ---------------- Østvegg (x = +9) med sirkulært glasskarnapp (bay window) ---------------- */}
       {/* Sørlig solid del av østvegg: Z fra 5.0 til 9.0 */}
-      <RigidBody type="fixed" position={[9.0, 3.0, 7.0]}>
+      <RigidBody type="fixed" position={[9.0, 6.0, 7.0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6.0, 4.0]} />
+          <boxGeometry args={[0.4, 12.0, 4.0]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
       {/* Nordlig solid del av østvegg: Z fra -2.0 til 1.0 */}
-      <RigidBody type="fixed" position={[9.0, 3.0, -0.5]}>
+      <RigidBody type="fixed" position={[9.0, 6.0, -0.5]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 6.0, 3.0]} />
+          <boxGeometry args={[0.4, 12.0, 3.0]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
@@ -128,10 +158,24 @@ export const Room3 = () => {
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
-      {/* Veggdel over vinduet: Z fra 1.0 til 5.0, høyde 1.5 (Y=4.5 til 6.0) */}
-      <RigidBody type="fixed" position={[9.0, 5.25, 3.0]}>
+      {/* Veggdel over vinduet: Z fra 1.0 til 5.0, hevet for høyere tak */}
+      <RigidBody type="fixed" position={[9.0, 8.25, 3.0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 1.5, 4.0]} />
+          <boxGeometry args={[0.4, 7.5, 4.0]} />
+          <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
+        </mesh>
+      </RigidBody>
+
+      {/* Sidevegger over karnappvinduer (fjerner glipper mot taket) */}
+      <RigidBody type="fixed" position={[9.75, 8.25, 4.5]} rotation={[0, Math.atan2(1.5, -1.0), 0]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[0.2, 7.5, 1.8]} />
+          <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
+        </mesh>
+      </RigidBody>
+      <RigidBody type="fixed" position={[9.75, 8.25, 1.5]} rotation={[0, Math.atan2(1.5, 1.0), 0]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[0.2, 7.5, 1.8]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
@@ -143,10 +187,10 @@ export const Room3 = () => {
           <meshStandardMaterial color="#b6905f" roughness={0.85} />
         </mesh>
       </RigidBody>
-      <RigidBody type="fixed" position={[9.75, 5.9, 3.0]}>
+      <RigidBody type="fixed" position={[9.75, 11.9, 3.0]}>
         <mesh>
           <boxGeometry args={[1.5, 0.2, 4.0]} />
-          <meshStandardMaterial color="#cdbfa6" roughness={1} />
+          <meshStandardMaterial color="#181614" roughness={1} />
         </mesh>
       </RigidBody>
 
@@ -204,15 +248,15 @@ export const Room3 = () => {
       {/* Lyset fra vinduet */}
       <pointLight position={[10.8, 2.65, 3.0]} intensity={6} color="#fff1d6" distance={14} decay={2} />
 
-      {/* East window backdrop (moved further back for better parallax) */}
-      <mesh position={[16.5, 3.0, 3.0]} rotation={[0, -Math.PI / 2, 0]}>
-        <planeGeometry args={[35, 21]} />
+      {/* East window backdrop (moved further back for better parallax and scaled up for high ceiling) */}
+      <mesh position={[25.0, 6.0, 3.0]} rotation={[0, -Math.PI / 2, 0]}>
+        <planeGeometry args={[75, 48]} />
         <meshBasicMaterial map={sunnyCourtyardTexture} toneMapped={false} />
       </mesh>
 
       {/* Tittel over rommet */}
       <Text
-        position={[-3.5, 5.2, -8.7]}
+        position={[-3.5, 11.2, -8.7]}
         fontSize={0.45}
         color="#8a6a44"
         anchorY="middle"
@@ -225,35 +269,35 @@ export const Room3 = () => {
 
 
       {/* ---------------- PLATFORM & STAIRS IN NW CORNER ---------------- */}
-      {/* Raised Platform */}
-      <RigidBody type="fixed" position={[-7.0, 1.0, -7.0]}>
+      {/* Raised Platform (Enlarged to 8x6 meters for even more space around portal) */}
+      <RigidBody type="fixed" position={[-5.0, 1.0, -6.0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[4, 2.0, 4]} />
+          <boxGeometry args={[8, 2.0, 6]} />
           <meshStandardMaterial color="#dcccb0" roughness={0.8} />
         </mesh>
       </RigidBody>
 
       {/* Railings on the platform */}
-      <mesh position={[-5.0, 2.5, -7.0]}>
-        <boxGeometry args={[0.08, 1.0, 4.0]} />
+      <mesh position={[-1.0, 2.5, -6.0]}>
+        <boxGeometry args={[0.08, 1.0, 6.0]} />
         <meshStandardMaterial color="#5b4a36" roughness={0.7} />
       </mesh>
-      <mesh position={[-8.5, 2.5, -5.0]}>
+      <mesh position={[-8.5, 2.5, -3.0]}>
         <boxGeometry args={[1.0, 1.0, 0.08]} />
         <meshStandardMaterial color="#5b4a36" roughness={0.7} />
       </mesh>
-      <mesh position={[-5.5, 2.5, -5.0]}>
-        <boxGeometry args={[1.0, 1.0, 0.08]} />
+      <mesh position={[-3.5, 2.5, -3.0]}>
+        <boxGeometry args={[5.0, 1.0, 0.08]} />
         <meshStandardMaterial color="#5b4a36" roughness={0.7} />
       </mesh>
 
-      {/* Stairs: 10 steps climbing (visuals only) */}
+      {/* Stairs: 10 steps climbing (visuals only, shifted to align with deeper platform) */}
       {Array.from({ length: 10 }).map((_, idx) => {
         const stepHeight = 0.2;
         const stepDepth = 0.3;
         const stepWidth = 2.0;
         const y = (idx + 0.5) * stepHeight;
-        const z = -5.0 + (9 - idx) * stepDepth + stepDepth / 2;
+        const z = -3.0 + (9 - idx) * stepDepth + stepDepth / 2;
         const x = -7.0;
         return (
           <mesh key={`step-${idx}`} position={[x, y, z]} receiveShadow castShadow>
@@ -264,7 +308,7 @@ export const Room3 = () => {
       })}
 
       {/* Invisible Slanted Ramp Collider for smooth stair climbing */}
-      <RigidBody type="fixed" position={[-7.0, 1.0, -3.5]} rotation={[Math.atan2(2.0, 3.0), 0, 0]}>
+      <RigidBody type="fixed" position={[-7.0, 1.0, -1.5]} rotation={[Math.atan2(2.0, 3.0), 0, 0]}>
         <CuboidCollider args={[1.0, 0.05, 1.803]} />
       </RigidBody>
 
@@ -278,18 +322,11 @@ export const Room3 = () => {
         <pointLight position={[-1.0, 1.5, 2.4]} intensity={4.5} color="#ffcf99" distance={6} decay={2} />
 
         {/* Flytende nummer + tittel ved stien */}
-        <Billboard position={[2.5, 3.5, 0]}>
-          <Text fontSize={0.45} color="#ffffff" anchorX="center">
-            1
-          </Text>
-          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
-            MCP
-          </Text>
-        </Billboard>
+        <StationLabel position={[2.5, 3.5, 0]} number="1" label="MCP" />
 
         <AudioZone
           position={[2.5, 1, 0]}
-          size={[6, 4, 4]}
+          size={[4.8, 4, 4]}
           audioUrl="/tts/mcp_mange_programmer.mp3"
           subtitleUrl="/tts/mcp_mange_programmer.json"
         />
@@ -311,55 +348,69 @@ export const Room3 = () => {
 
       {/* ================= STASJON 2 — MCP-servere (z = -0.5) ================= */}
       <group position={[5.0, 0, -0.5]}>
-        {/* TV på kommode = «skjerm» som viser nettleseren/serverne, vendt mot rommet */}
+        {/* Drawer cabinet vendt mot rommet */}
         <Model id="drawer_cabinet" position={[2.2, 0, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} solid />
-        <Model id="Television_01" position={[2.05, 2.822, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
-        <pointLight position={[1.0, 3.642, 0]} intensity={3.5} color="#bcd6ff" distance={5} decay={2} />
-        {/* Skjerm-glød / liste over tilkoblede servere */}
-        <Text
-          position={[1.78, 3.692, 0]}
-          rotation={[0, -Math.PI / 2, 0]}
-          fontSize={0.16}
-          color="#dff0ff"
-          maxWidth={2.0}
-          textAlign="center"
-          outlineWidth={0.004}
-          outlineColor="#1a2a44"
-        >
-          {"MCP-SERVERE\nChrome · Blender\nPhotoshop · Premiere"}
-        </Text>
 
         {/* Flytende nummer + tittel */}
-        <Billboard position={[-2.5, 3.5, 0]}>
-          <Text fontSize={0.45} color="#ffffff" anchorX="center">
-            2
-          </Text>
-          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
-            MCP-servere
-          </Text>
-        </Billboard>
+        <StationLabel position={[-2.5, 3.5, 0]} number="2" label="MCP-servere" />
 
         <AudioZone
           position={[-2.5, 1, 0.5]}
-          size={[5, 4, 3]}
+          size={[4.8, 4, 3]}
           audioUrl="/tts/mcp_servere.mp3"
           subtitleUrl="/tts/mcp_servere.json"
         />
       </group>
 
-      {/* Painting 2: postrom_browser_steering (above TV/drawer cabinet) */}
-      <group position={[7.0, 3.2, -0.5]} rotation={[0, -Math.PI / 2, 0]}>
+      {/* Painting 2: mcp_servers (above Stasjon 2 drawer cabinet) */}
+      <group position={[8.8, 3.2, -0.5]} rotation={[0, -Math.PI / 2, 0]}>
         {/* Frame */}
         <mesh castShadow>
-          <boxGeometry args={[1.8, 1.2, 0.08]} />
-          <meshStandardMaterial color="#2b1d0c" roughness={0.7} />
+          <boxGeometry args={[3.2, 2.2, 0.08]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
         </mesh>
         {/* Canvas */}
-        <mesh position={[0, 0, 0.041]} castShadow>
-          <planeGeometry args={[1.7, 1.1]} />
-          <meshStandardMaterial map={browserTexture} roughness={0.2} metalness={0.1} />
+        <mesh position={[0, 0, 0.045]} castShadow>
+          <planeGeometry args={[3.0, 2.0]} />
+          <meshStandardMaterial map={mcpServersTexture} roughness={0.3} />
         </mesh>
       </group>
+
+      {/* Lamp over mcp_servers painting */}
+      <mesh position={[8.8, 4.6, -0.5]}>
+        <boxGeometry args={[0.4, 0.05, 0.05]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <mesh position={[8.6, 4.55, -0.5]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <pointLight position={[8.6, 4.4, -0.5]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+
+      {/* Painting 3: postrom_browser_steering (next to Stasjon 3 table) */}
+      <group position={[8.8, 3.2, 5.0]} rotation={[0, -Math.PI / 2, 0]}>
+        {/* Frame */}
+        <mesh castShadow>
+          <boxGeometry args={[3.2, 2.2, 0.08]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
+        </mesh>
+        {/* Canvas */}
+        <mesh position={[0, 0, 0.045]} castShadow>
+          <planeGeometry args={[3.0, 2.0]} />
+          <meshStandardMaterial map={browserTexture} roughness={0.3} />
+        </mesh>
+      </group>
+
+      {/* Lamp over postrom_browser_steering painting */}
+      <mesh position={[8.8, 4.6, 5.0]}>
+        <boxGeometry args={[0.4, 0.05, 0.05]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <mesh position={[8.6, 4.55, 5.0]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <pointLight position={[8.6, 4.4, 5.0]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
 
       {/* ================= STASJON 3 — Claude in Chrome (z = 5.0) ================= */}
       <group position={[-5.0, 0, 5.0]}>
@@ -370,18 +421,11 @@ export const Room3 = () => {
         <pointLight position={[-1.0, 2.268, 0]} intensity={4.0} color="#ffe0b0" distance={5} decay={2} />
 
         {/* Flytende nummer + tittel */}
-        <Billboard position={[2.5, 3.5, 0]}>
-          <Text fontSize={0.45} color="#ffffff" anchorX="center">
-            3
-          </Text>
-          <Text position={[0, -0.4, 0]} fontSize={0.22} color="#ffffff" anchorX="center">
-            Claude in Chrome
-          </Text>
-        </Billboard>
+        <StationLabel position={[2.5, 3.5, 0]} number="3" label="Claude in Chrome" />
 
         <AudioZone
           position={[2.5, 1, 0]}
-          size={[6, 4, 4]}
+          size={[4.8, 4, 4]}
           audioUrl="/tts/claude_in_chrome.mp3"
           subtitleUrl="/tts/claude_in_chrome.json"
         />
@@ -399,10 +443,10 @@ export const Room3 = () => {
       <Model id="potted_plant_02" position={[-7.6, 0, 7.4]} rotation={[0, 0, 0]} scale={1.5} />
 
       {/* ---------------- Belysning (varm og myk) ---------------- */}
-      <ambientLight intensity={0.02} color="#ffe8cc" />
-      <hemisphereLight args={["#fff1dd", "#5a4a38", 0.03]} />
+      <ambientLight intensity={0.08} color="#ffe8cc" />
+      <hemisphereLight args={["#fff1dd", "#5a4a38", 0.10]} />
       <directionalLight
-        position={[12, 11, 3]}
+        position={[15, 15, 5]}
         intensity={2.0}
         color="#ffe6bc"
         castShadow
@@ -415,9 +459,16 @@ export const Room3 = () => {
         shadow-bias={-0.0005}
       />
 
+      {/* Lysekroner (Chandelier) hengt fra det høye taket */}
+      <Model id="Chandelier_01_1k" position={[0, 11.9, 2.5]} rotation={[0, 0, 0]} scale={2.0} />
+      <pointLight position={[0, 10.8, 2.5]} intensity={16} color="#ffd9a0" distance={16} decay={2} castShadow />
+
+      <Model id="Chandelier_01_1k" position={[-5.0, 11.9, -6.0]} rotation={[0, 0, 0]} scale={2.0} />
+      <pointLight position={[-5.0, 10.8, -6.0]} intensity={16} color="#ffd9a0" distance={16} decay={2} castShadow />
+
       {/* ---------------- Dører ---------------- */}
       {/* VIDERE — Biblioteket (plassert på raised platform i NW-hjørnet) */}
-      <Portal position={[-7.0, 2.0, -8.0]} room="room4" label="Biblioteket" color="#3aa0ff" />
+      <Portal position={[-5.0, 2.0, -6.0]} room="room4" label="Biblioteket" color="#3aa0ff" />
       {/* TILBAKE — Kontoret (sørvegg) */}
       <Portal position={[3, 0, 7.0]} rotation={[0, Math.PI, 0]} room="room2" label="Tilbake til kontoret" color="#ff4a4a" />
 
@@ -438,6 +489,7 @@ useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_nor_gl_1k.jpg"
 useTexture.preload("/textures/laminate_floor_03/laminate_floor_03_rough_1k.jpg");
 useTexture.preload("/artwork/postrom_mcp.png");
 useTexture.preload("/artwork/postrom_browser_steering.png");
+useTexture.preload("/artwork/mcp_servers.jpg");
 useTexture.preload("/textures/brick_floor_003/diff.jpg");
 useTexture.preload("/textures/brick_floor_003/nor.jpg");
 useTexture.preload("/textures/brick_floor_003/rough.jpg");

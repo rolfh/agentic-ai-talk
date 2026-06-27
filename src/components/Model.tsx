@@ -41,7 +41,7 @@ const realisticIds = [
 
 export const Model = ({
   id,
-  res = "2k",
+  res = "1k",
   position = [0, 0, 0],
   rotation = [0, 0, 0],
   scale = 1,

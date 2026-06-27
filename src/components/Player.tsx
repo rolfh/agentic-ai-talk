@@ -14,6 +14,7 @@ export const Player = () => {
   const rigidBody = useRef<RapierRigidBody>(null);
   const [, getKeys] = useKeyboardControls();
   const currentRoom = useStore((state) => state.currentRoom);
+  const speedFactor = useRef(0);
 
   // Teleport player to a safe position inside the room upon room transitions
   useEffect(() => {
@@ -21,6 +22,7 @@ export const Player = () => {
       // Reset velocity to prevent carrying speed through teleportation
       rigidBody.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       rigidBody.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      speedFactor.current = 0; // Reset acceleration ramp
 
       // Spawn at a safe coordinate depending on the room
       if (currentRoom === "outside") {
@@ -29,9 +31,9 @@ export const Player = () => {
       } else if (currentRoom === "lobby") {
         rigidBody.current.setTranslation({ x: 0, y: 2, z: 3.0 }, true);
       } else if (currentRoom === "room2") {
-        rigidBody.current.setTranslation({ x: 0, y: 2, z: -5.0 }, true);
+        rigidBody.current.setTranslation({ x: -6.5, y: 2, z: -5.0 }, true);
       } else if (currentRoom === "room3") {
-        rigidBody.current.setTranslation({ x: 3, y: 2, z: 5.0 }, true);
+        rigidBody.current.setTranslation({ x: 3, y: 2, z: 3.0 }, true);
       } else if (currentRoom === "room4") {
         rigidBody.current.setTranslation({ x: -3, y: 2, z: 5.0 }, true);
       }
@@ -40,11 +42,21 @@ export const Player = () => {
 
   const isSpectating = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("view");
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (isSpectating) return;
     if (!rigidBody.current) return;
     const { forward, backward, left, right, jump } = getKeys();
     
+    // Check if player is pressing any movement keys
+    const isMoving = forward || backward || left || right;
+    
+    // Velocity ramp-up over 0.4 seconds, fast deceleration (0.15s) when released
+    if (isMoving) {
+      speedFactor.current = Math.min(1.0, speedFactor.current + delta / 0.4);
+    } else {
+      speedFactor.current = Math.max(0.0, speedFactor.current - delta / 0.15);
+    }
+
     // Get current velocity and position
     const velocity = rigidBody.current.linvel();
     const pos = rigidBody.current.translation();
@@ -56,11 +68,11 @@ export const Player = () => {
     frontVector.set(0, 0, Number(backward) - Number(forward));
     sideVector.set(Number(left) - Number(right), 0, 0);
     
-    // Normalize and apply speed and camera direction
+    // Normalize and apply ramp-up speed and camera direction
     direction
       .subVectors(frontVector, sideVector)
       .normalize()
-      .multiplyScalar(SPEED)
+      .multiplyScalar(SPEED * speedFactor.current)
       .applyEuler(state.camera.rotation);
     
     let nextVelY = velocity.y;
