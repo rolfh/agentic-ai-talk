@@ -484,7 +484,7 @@ export const Room4 = () => {
       <Model id="SchoolChair_01" position={[-1.2, 0, -3.2]} rotation={[0, Math.PI / 2, 0]} scale={1.2} solid />
       <Model id="book_encyclopedia_set_01" position={[0, 1.206, -3.2]} scale={1} />
       <Model id="vintage_oil_lamp" position={[0.4, 1.206, -3.2]} scale={1} />
-      <pointLight position={[0, 1.856, -3.2]} intensity={5} color="#ffc080" distance={5} decay={2} />
+      <pointLight position={[0, 1.856, -3.2]} intensity={5} color="#ffc080" distance={5} decay={2} castShadow />
 
       {/* Decorative items */}
       <Model id="brass_candleholders_1k" position={[0.2, 1.206, -3.0]} rotation={[0, 0, 0]} scale={1.2} solid={false} />
@@ -541,7 +541,7 @@ export const Room4 = () => {
       />
       {/* Oljelampe på bordet + varmt punktlys */}
       <Model id="vintage_oil_lamp" position={[-4.5, 1.005, -7.5]} scale={1} />
-      <pointLight position={[-4.5, 1.555, -7.5]} intensity={6} color="#ffb066" distance={7} decay={2} />
+      <pointLight position={[-4.5, 1.555, -7.5]} intensity={6} color="#ffb066" distance={7} decay={2} castShadow />
       {/* Et oppslått oppslagsverk på bordet */}
       <Model id="book_encyclopedia_set_01" position={[-4.0, 1.005, -7.2]} scale={1} />
 
@@ -565,7 +565,7 @@ export const Room4 = () => {
       <Model id="drawer_cabinet" position={[-6.0, 0, 2.0]} rotation={[0, Math.PI / 2, 0]} scale={1.2} solid />
       <Model id="side_table_01" position={[5.8, 0, -4.0]} scale={1.2} solid />
       <Model id="vintage_oil_lamp" position={[5.8, 0.6608, -4.0]} scale={1} />
-      <pointLight position={[5.8, 1.2, -4.0]} intensity={2} color="#ffb066" distance={5} decay={2} />
+      <pointLight position={[5.8, 1.2, -4.0]} intensity={2} color="#ffb066" distance={5} decay={2} castShadow />
 
       {/* ---------- Planter i hjørnene ---------- */}
       <Model id="potted_plant_01" position={[7.6, 0, 7.6]} scale={1} />

@@ -309,7 +309,7 @@ export const Lobby = () => {
       {/* Sidebord ved sofaen med oljelampe + varmt fyll-lys */}
       <Model id="side_table_01" position={[-6.9, 0, -3.8]} rotation={[0, 0, 0]} scale={1.6} solid />
       <Model id="vintage_oil_lamp" position={[-6.9, 0.88, -3.8]} rotation={[0, 0, 0]} scale={1.6} />
-      <pointLight position={[-6.9, 1.76, -3.8]} intensity={2.5} color="#ffcf99" distance={5} decay={2} />
+      <pointLight position={[-6.9, 1.76, -3.8]} intensity={2.5} color="#ffcf99" distance={5} decay={2} castShadow />
 
       {/* Bokhylle mot vestveggen med encyklopedi-sett */}
       <Model id="wooden_bookshelf_worn" position={[-8.4, 0, 3.2]} rotation={[0, Math.PI / 2, 0]} scale={1} solid />

@@ -210,7 +210,7 @@ export const Room3 = () => {
       </mesh>
 
       {/* Lyset fra vinduet */}
-      <pointLight position={[10.8, 2.65, 3.0]} intensity={6} color="#fff1d6" distance={14} decay={2} />
+      <pointLight position={[10.8, 2.65, 3.0]} intensity={6} color="#fff1d6" distance={14} decay={2} castShadow />
 
       {/* East window backdrop (moved further back for better parallax and scaled up for high ceiling) */}
       <mesh position={[25.0, 6.0, 3.0]} rotation={[0, -Math.PI / 2, 0]}>
@@ -283,7 +283,7 @@ export const Room3 = () => {
         {/* Sidebord med oljelampe ved siden av */}
         <Model id="side_table_01" position={[-1.0, 0, 2.4]} rotation={[0, 0, 0]} scale={1.5} solid />
         <Model id="vintage_oil_lamp" position={[-1.0, 0.8261, 2.4]} rotation={[0, 0, 0]} scale={1.5} />
-        <pointLight position={[-1.0, 1.5, 2.4]} intensity={4.5} color="#ffcf99" distance={6} decay={2} />
+        <pointLight position={[-1.0, 1.5, 2.4]} intensity={4.5} color="#ffcf99" distance={6} decay={2} castShadow />
 
         {/* Flytende nummer + tittel ved stien */}
         <StationLabel position={[2.5, 3.5, 0]} number="1" label="MCP" />
@@ -353,7 +353,7 @@ export const Room3 = () => {
         <Model id="round_wooden_table_01" position={[-1.0, 0, 0]} rotation={[0, 0, 0]} scale={1.5} solid />
         <Model id="classic_laptop" position={[-1.0, 1.5075, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} />
         <Model id="desk_lamp_arm_01" position={[-1.9, 1.5075, 0.9]} rotation={[0, 0.6, 0]} scale={1.5} />
-        <pointLight position={[-1.0, 2.268, 0]} intensity={4.0} color="#ffe0b0" distance={5} decay={2} />
+        <pointLight position={[-1.0, 2.268, 0]} intensity={4.0} color="#ffe0b0" distance={5} decay={2} castShadow />
 
         {/* Flytende nummer + tittel */}
         <StationLabel position={[2.5, 3.5, 0]} number="3" label="Claude in Chrome" />

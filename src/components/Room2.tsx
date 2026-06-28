@@ -146,9 +146,9 @@ export const Room2 = () => {
         ))}
 
         {/* Innfallende dagslys fra vinduet (flere lyspunkter for jevn fordeling) */}
-        <pointLight position={[2, 3, -4.5]} intensity={3.5} color="#fdf4e3" distance={12} decay={2} />
-        <pointLight position={[2, 3, 0.0]} intensity={3.5} color="#fdf4e3" distance={12} decay={2} />
-        <pointLight position={[2, 3, 4.5]} intensity={3.5} color="#fdf4e3" distance={12} decay={2} />
+        <pointLight position={[2, 3, -4.5]} intensity={3.5} color="#fdf4e3" distance={12} decay={2} castShadow />
+        <pointLight position={[2, 3, 0.0]} intensity={3.5} color="#fdf4e3" distance={12} decay={2} castShadow />
+        <pointLight position={[2, 3, 4.5]} intensity={3.5} color="#fdf4e3" distance={12} decay={2} castShadow />
       </group>
 
       {/* Landscape Painting behind Portal (daytimeSkyTexture) on South Wall */}
@@ -174,7 +174,7 @@ export const Room2 = () => {
         const ceilingY = 8.0 - x / 6;
         const y = ceilingY - 0.7;
         return (
-          <pointLight key={idx} position={[x, y, z]} intensity={1.6} color="#fdf6e8" distance={7} decay={2} />
+          <pointLight key={idx} position={[x, y, z]} intensity={1.6} color="#fdf6e8" distance={7} decay={2} castShadow />
         );
       })}
 
@@ -237,7 +237,7 @@ export const Room2 = () => {
         <Model id="classic_laptop" position={[2.5, 1.1813, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
         <Model id="desk_lamp_arm_01" position={[3.2, 1.1813, -0.9]} rotation={[0, Math.PI / 2, 0]} scale={1.5} />
         <Model id="SchoolChair_01" position={[1.0, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} solid />
-        <pointLight position={[2.0, 1.25, -0.4]} intensity={2.2} color="#ffe6c0" distance={4} decay={2} />
+        <pointLight position={[2.0, 1.25, -0.4]} intensity={2.2} color="#ffe6c0" distance={4} decay={2} castShadow />
 
         {/* Flytende nummer + tittel over stien */}
         <StationLabel position={[-2.3, 3.0, 0]} number="1" label="På dine filer" />
@@ -277,7 +277,7 @@ export const Room2 = () => {
         <Model id="classic_laptop" position={[2.5, 1.1813, 0]} rotation={[0, -Math.PI / 2, 0]} scale={1.5} />
         <Model id="desk_lamp_arm_01" position={[3.2, 1.1813, 0.9]} rotation={[0, Math.PI / 2, 0]} scale={1.5} />
         <Model id="modern_arm_chair_01" position={[1.0, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={1.5} solid />
-        <pointLight position={[2.0, 1.25, 0.4]} intensity={2.2} color="#ffe6c0" distance={4} decay={2} />
+        <pointLight position={[2.0, 1.25, 0.4]} intensity={2.2} color="#ffe6c0" distance={4} decay={2} castShadow />
 
         <StationLabel position={[-2.3, 2.4, 0]} number="3" label="30 PDF → 1 ark" />
 
