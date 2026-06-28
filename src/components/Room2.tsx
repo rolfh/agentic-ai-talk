@@ -51,43 +51,35 @@ export const Room2 = () => {
       </RigidBody>
 
       {/* Asymmetrisk skråtak (shed-tak) (Y = 6.5 i øst, Y = 9.5 i vest) med integrert takvindu */}
-      <group position={[0, 8.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
+      <RigidBody type="fixed" colliders="trimesh" position={[0, 8.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
         {/* Vestlig solid del av taket */}
-        <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow castShadow position={[-8, 0, 0]}>
-            <boxGeometry args={[2, 0.2, 18]} />
-            <meshStandardMaterial {...woodTextures} color="#c8a877" />
-          </mesh>
-        </RigidBody>
+        <mesh receiveShadow castShadow position={[-8, 0, 0]}>
+          <boxGeometry args={[2, 0.2, 18]} />
+          <meshStandardMaterial {...woodTextures} color="#c8a877" />
+        </mesh>
 
         {/* Østlig solid del av taket */}
-        <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow castShadow position={[2, 0, 0]}>
-            <boxGeometry args={[14, 0.2, 18]} />
-            <meshStandardMaterial {...woodTextures} color="#c8a877" />
-          </mesh>
-        </RigidBody>
+        <mesh receiveShadow castShadow position={[2, 0, 0]}>
+          <boxGeometry args={[14, 0.2, 18]} />
+          <meshStandardMaterial {...woodTextures} color="#c8a877" />
+        </mesh>
 
         {/* Nord/Sør-rammer rundt takvinduet */}
-        <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow castShadow position={[-6, 0, -8]}>
-            <boxGeometry args={[2, 0.2, 2]} />
-            <meshStandardMaterial {...woodTextures} color="#c8a877" />
-          </mesh>
-        </RigidBody>
-        <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow castShadow position={[-6, 0, 8]}>
-            <boxGeometry args={[2, 0.2, 2]} />
-            <meshStandardMaterial {...woodTextures} color="#c8a877" />
-          </mesh>
-        </RigidBody>
+        <mesh receiveShadow castShadow position={[-6, 0, -8]}>
+          <boxGeometry args={[2, 0.2, 2]} />
+          <meshStandardMaterial {...woodTextures} color="#c8a877" />
+        </mesh>
+        <mesh receiveShadow castShadow position={[-6, 0, 8]}>
+          <boxGeometry args={[2, 0.2, 2]} />
+          <meshStandardMaterial {...woodTextures} color="#c8a877" />
+        </mesh>
 
         {/* Takvindu glass (skylight) */}
         <mesh position={[-6, 0, 0]}>
           <boxGeometry args={[2, 0.1, 14]} />
           <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.5} transparent roughness={0.05} />
         </mesh>
-      </group>
+      </RigidBody>
 
       {/* Bakvegg (Nord, z = -9) — lobby-døra */}
       <RigidBody type="fixed" position={[0, 6, -9]}>
