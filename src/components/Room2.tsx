@@ -51,7 +51,8 @@ export const Room2 = () => {
       </RigidBody>
 
       {/* Asymmetrisk skråtak (shed-tak) (Y = 6.5 i øst, Y = 9.5 i vest) med integrert takvindu */}
-      <RigidBody type="fixed" colliders="trimesh" position={[0, 8.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
+      {/* Visual meshes - in a standard group so they always render correctly without Rapier bugs */}
+      <group position={[0, 8.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
         {/* Vestlig solid del av taket */}
         <mesh receiveShadow castShadow position={[-8, 0, 0]}>
           <boxGeometry args={[2, 0.2, 18]} />
@@ -79,6 +80,17 @@ export const Room2 = () => {
           <boxGeometry args={[2, 0.1, 14]} />
           <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.5} transparent roughness={0.05} />
         </mesh>
+      </group>
+
+      {/* Physics colliders - separate from visuals, using explicit cuboid colliders */}
+      <RigidBody type="fixed" position={[0, 8.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
+        {/* Collider for vestlig solid del */}
+        <CuboidCollider args={[1, 0.1, 9]} position={[-8, 0, 0]} />
+        {/* Collider for østlig solid del */}
+        <CuboidCollider args={[7, 0.1, 9]} position={[2, 0, 0]} />
+        {/* Collider for nord/sør-rammer */}
+        <CuboidCollider args={[1, 0.1, 1]} position={[-6, 0, -8]} />
+        <CuboidCollider args={[1, 0.1, 1]} position={[-6, 0, 8]} />
       </RigidBody>
 
       {/* Bakvegg (Nord, z = -9) — lobby-døra */}
