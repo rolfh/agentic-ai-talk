@@ -62,13 +62,16 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
   useFrame((state) => {
     if (materialRef.current) {
       const t = state.clock.elapsedTime;
-      materialRef.current.uniforms.uTime.value = t;
-      const isActive = activeAudioId === audioUrl;
-      materialRef.current.uniforms.uActive.value = THREE.MathUtils.lerp(
-        materialRef.current.uniforms.uActive.value,
-        isActive ? 1.0 : 0.0,
-        0.1
-      );
+      const uniforms = materialRef.current.uniforms;
+      if (uniforms.uTime && uniforms.uActive) {
+        uniforms.uTime.value = t;
+        const isActive = activeAudioId === audioUrl;
+        uniforms.uActive.value = THREE.MathUtils.lerp(
+          uniforms.uActive.value,
+          isActive ? 1.0 : 0.0,
+          0.1
+        );
+      }
     }
   });
 
