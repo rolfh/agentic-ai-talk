@@ -41,6 +41,16 @@ interface AudioZoneProps {
 
 let activeAudioElement: HTMLAudioElement | null = null;
 
+const resolveUrl = (url: string) => {
+  if (url.startsWith('/') && !url.startsWith('//') && !url.startsWith('data:')) {
+    const base = import.meta.env.BASE_URL || '/';
+    const cleanBase = base.endsWith('/') ? base : `${base}/`;
+    const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+    return `${cleanBase}${cleanUrl}`;
+  }
+  return url;
+};
+
 export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZoneProps) => {
   const setSubtitle = useStore((state) => state.setSubtitle);
   const activeAudioId = useStore((state) => state.activeAudioId);
@@ -77,7 +87,7 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
 
   // Load subtitles JSON
   useEffect(() => {
-    fetch(subtitleUrl)
+    fetch(resolveUrl(subtitleUrl))
       .then((res) => {
         if (!res.ok) throw new Error(`Subtitles not found at ${subtitleUrl}`);
         return res.json();
@@ -119,7 +129,7 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
 
     // 2. Create audio if it doesn't exist
     if (!audioRef.current) {
-      audioRef.current = new Audio(audioUrl);
+      audioRef.current = new Audio(resolveUrl(audioUrl));
       
       // When audio finishes, clear subtitles
       audioRef.current.addEventListener("ended", () => {
