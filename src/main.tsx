@@ -5,8 +5,6 @@ import * as THREE from 'three'
 // immediately at the module level when imported.
 THREE.DefaultLoadingManager.setURLModifier((url) => {
   try {
-    // Three.js often resolves URLs to absolute paths (e.g. https://... or http://...)
-    // before they reach the DefaultLoadingManager. We parse the URL to handle both cases.
     const parsed = new URL(url, window.location.href);
     if (parsed.origin === window.location.origin) {
       const base = import.meta.env.BASE_URL || '/';
@@ -16,12 +14,14 @@ THREE.DefaultLoadingManager.setURLModifier((url) => {
         if (!parsed.pathname.startsWith(cleanBasePathname)) {
           const relativePath = parsed.pathname.startsWith('/') ? parsed.pathname.slice(1) : parsed.pathname;
           parsed.pathname = cleanBasePathname + relativePath;
-          return parsed.toString();
+          const resolved = parsed.toString();
+          console.log("[URL Modifier] Intercepted & Resolved:", url, "->", resolved);
+          return resolved;
         }
       }
     }
-  } catch {
-    // Fall back to original url if parsing fails (e.g. data URIs)
+  } catch (err) {
+    console.error("[URL Modifier] Error parsing URL:", url, err);
   }
   return url;
 });
