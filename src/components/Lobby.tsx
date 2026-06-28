@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, useGLTF, Html } from "@react-three/drei";
+import { useTexture, useGLTF } from "@react-three/drei";
+import { StationLabel } from "./StationLabel";
+import { Painting } from "./Painting";
+import { useTiledTextures } from "../hooks/useTiledTextures";
 import * as THREE from "three";
 
 import { Portal } from "./Portal";
@@ -8,34 +11,7 @@ import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Football } from "./Football";
 
-interface StationLabelProps {
-  position: [number, number, number];
-  number?: string | number;
-  label: string;
-}
 
-const StationLabel = ({ position, number, label }: StationLabelProps) => {
-  return (
-    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
-      <div style={{
-        fontFamily: "'Instrument Serif', serif",
-        color: "white",
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
-        minWidth: "300px",
-        padding: "6px 12px",
-        borderRadius: "8px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        textAlign: "center",
-        pointerEvents: "none",
-        userSelect: "none",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
-      }}>
-        {number && <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>}
-        <div style={{ fontSize: "11px", marginTop: number ? "2px" : "0px", letterSpacing: "0.03em" }}>{label}</div>
-      </div>
-    </Html>
-  );
-};
 
 export const Lobby = () => {
   // Load laminate floor textures (gir et varmt tregulv) — BEHOLDT
@@ -54,18 +30,8 @@ export const Lobby = () => {
 
   const twilightGardenTexture = useTexture("/artwork/twilight_garden.png");
 
-  useMemo(() => {
-    Object.values(floorTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(6, 6);
-    });
-    Object.values(wallTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(4, 4);
-    });
-  }, [floorTextures, wallTextures]);
+  useTiledTextures(floorTextures, 6, 6);
+  useTiledTextures(wallTextures, 4, 4);
 
   const textureWelkommen = useTexture("/artwork/stua_welkommen.png");
   const textureCowork = useTexture("/artwork/claude_cowork.jpg");
@@ -253,50 +219,26 @@ export const Lobby = () => {
 
       {/* ---------- Kunstverk ---------- */}
       {/* 1. stua_welkommen.png henges på vestveggen over sofaen */}
-      <group position={[-8.8, 2.5, -3.8]} rotation={[0, Math.PI / 2, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[3.2, 2.2, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        <mesh position={[0, 0, 0.045]}>
-          <planeGeometry args={[3.0, 2.0]} />
-          <meshStandardMaterial map={textureWelkommen} roughness={0.3} />
-        </mesh>
-      </group>
-
-      {/* Lamp over stua_welkommen */}
-      <mesh position={[-8.8, 3.9, -3.8]}>
-        <boxGeometry args={[0.4, 0.05, 0.05]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <mesh position={[-8.6, 3.85, -3.8]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <pointLight position={[-8.6, 3.7, -3.8]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+      <Painting
+        position={[-8.8, 2.5, -3.8]}
+        rotation={[0, Math.PI / 2, 0]}
+        texture={textureWelkommen}
+        width={3.0}
+        height={2.0}
+        lamp
+      />
 
       {/* 2. claude_cowork picture on north wall (doubled in size) */}
-      <group position={[0, 5.2, -8.8]} rotation={[0, 0, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[6.4, 4.4, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        <mesh position={[0, 0, 0.045]}>
-          <planeGeometry args={[6.0, 4.0]} />
-          <meshStandardMaterial map={textureCowork} roughness={0.3} />
-        </mesh>
-      </group>
-
-      {/* Lamp over screenshot painting */}
-      <mesh position={[0, 6.6, -8.8]}>
-        <boxGeometry args={[0.05, 0.05, 0.4]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <mesh position={[0, 6.55, -8.6]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <pointLight position={[0, 6.4, -8.6]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+      <Painting
+        position={[0, 5.2, -8.8]}
+        rotation={[0, 0, 0]}
+        texture={textureCowork}
+        width={6.0}
+        height={4.0}
+        frameWidth={6.4}
+        frameHeight={4.4}
+        lamp
+      />
 
       {/* Floor Lamp pointing at Chess Board */}
       <group position={[-5.8, 0, -2.5]}>

@@ -1,41 +1,15 @@
-import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, Text, Html } from "@react-three/drei";
-import * as THREE from "three";
+import { useTexture, Text } from "@react-three/drei";
+import { StationLabel } from "./StationLabel";
+import { Painting } from "./Painting";
+import { useTiledTextures } from "../hooks/useTiledTextures";
 
 import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Portal } from "./Portal";
 import { Football } from "./Football";
 
-interface StationLabelProps {
-  position: [number, number, number];
-  number?: string | number;
-  label: string;
-}
 
-const StationLabel = ({ position, number, label }: StationLabelProps) => {
-  return (
-    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
-      <div style={{
-        fontFamily: "'Instrument Serif', serif",
-        color: "white",
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
-        minWidth: "300px",
-        padding: "6px 12px",
-        borderRadius: "8px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        textAlign: "center",
-        pointerEvents: "none",
-        userSelect: "none",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
-      }}>
-        {number && <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>}
-        <div style={{ fontSize: "11px", marginTop: number ? "2px" : "0px", letterSpacing: "0.03em" }}>{label}</div>
-      </div>
-    </Html>
-  );
-};
 
 /**
  * BIBLIOTEKET — lun lesesal.
@@ -79,18 +53,8 @@ export const Room4 = () => {
   const promptingTexture = useTexture("/artwork/biblioteket_prompting.png");
   const manualsTexture = useTexture("/artwork/biblioteket_manuals.png");
 
-  useMemo(() => {
-    Object.values(floorTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(6, 6);
-    });
-    Object.values(woodenPlanksTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(6, 6);
-    });
-  }, [floorTextures, woodenPlanksTextures]);
+  useTiledTextures(floorTextures, 6, 6);
+  useTiledTextures(woodenPlanksTextures, 6, 6);
 
   // Bokhyller langs venstre vegg (x = -8.2, front mot +x) i alcoven.
   const leftShelves = [-4.1, -1.7, 0.7, 3.1];
@@ -550,16 +514,19 @@ export const Room4 = () => {
         </mesh>
         {/* Artwork Canvas and inner Frame tilted back */}
         <group position={[-0.03, 1.25, 0.0]} rotation={[0, 0, -0.15]}>
-          {/* Frame */}
-          <mesh castShadow>
-            <boxGeometry args={[0.08, 0.9, 1.1]} />
-            <meshStandardMaterial color="#2b1d0c" roughness={0.7} />
-          </mesh>
-          {/* Painting */}
-          <mesh position={[-0.041, 0, 0]} rotation={[0, -Math.PI / 2, 0]} castShadow>
-            <planeGeometry args={[1.0, 0.8]} />
-            <meshStandardMaterial map={promptingTexture} roughness={0.2} metalness={0.1} />
-          </mesh>
+          <Painting
+            position={[0, 0, 0]}
+            rotation={[0, -Math.PI / 2, 0]}
+            texture={promptingTexture}
+            width={1.0}
+            height={0.8}
+            frameWidth={1.1}
+            frameHeight={0.9}
+            frameColor="#2b1d0c"
+            frameRoughness={0.7}
+            canvasRoughness={0.2}
+            canvasMetalness={0.1}
+          />
         </group>
       </group>
 
@@ -579,18 +546,19 @@ export const Room4 = () => {
       <Model id="book_encyclopedia_set_01" position={[-4.0, 1.005, -7.2]} scale={1} />
 
       {/* Painting 2: biblioteket_manuals (on the wall in the Station 5 alcove, behind lounge chair) */}
-      <group position={[-8.78, 2.6, -6.5]} rotation={[0, Math.PI / 2, 0]}>
-        {/* Frame */}
-        <mesh castShadow>
-          <boxGeometry args={[1.4, 1.0, 0.08]} />
-          <meshStandardMaterial color="#2b1d0c" roughness={0.7} />
-        </mesh>
-        {/* Canvas */}
-        <mesh position={[0, 0, 0.041]} castShadow>
-          <planeGeometry args={[1.3, 0.9]} />
-          <meshStandardMaterial map={manualsTexture} roughness={0.2} metalness={0.1} />
-        </mesh>
-      </group>
+      <Painting
+        position={[-8.78, 2.6, -6.5]}
+        rotation={[0, Math.PI / 2, 0]}
+        texture={manualsTexture}
+        width={1.3}
+        height={0.9}
+        frameWidth={1.4}
+        frameHeight={1.0}
+        frameColor="#2b1d0c"
+        frameRoughness={0.7}
+        canvasRoughness={0.2}
+        canvasMetalness={0.1}
+      />
 
       {/* ---------- Dekorasjoner for andre stasjoner ---------- */}
       <Model id="SchoolChair_01" position={[5.7, 0, 5.0]} rotation={[0, -Math.PI / 2, 0]} scale={1.2} solid />

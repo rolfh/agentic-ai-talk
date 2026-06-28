@@ -1,41 +1,15 @@
-import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, Text, Html } from "@react-three/drei";
-import * as THREE from "three";
+import { useTexture, Text } from "@react-three/drei";
+import { StationLabel } from "./StationLabel";
+import { Painting } from "./Painting";
+import { useTiledTextures } from "../hooks/useTiledTextures";
 
 import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Portal } from "./Portal";
 import { Football } from "./Football";
 
-interface StationLabelProps {
-  position: [number, number, number];
-  number: string | number;
-  label: string;
-}
 
-const StationLabel = ({ position, number, label }: StationLabelProps) => {
-  return (
-    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
-      <div style={{
-        fontFamily: "'Instrument Serif', serif",
-        color: "white",
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
-        minWidth: "300px",
-        padding: "6px 12px",
-        borderRadius: "8px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        textAlign: "center",
-        pointerEvents: "none",
-        userSelect: "none",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
-      }}>
-        <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>
-        <div style={{ fontSize: "11px", marginTop: "2px", letterSpacing: "0.03em" }}>{label}</div>
-      </div>
-    </Html>
-  );
-};
 
 /**
  * POSTROMMET — «den strekker seg ut».
@@ -64,18 +38,8 @@ export const Room3 = () => {
   const browserTexture = useTexture("/artwork/postrom_browser_steering.png");
   const mcpServersTexture = useTexture("/artwork/mcp_servers.jpg");
 
-  useMemo(() => {
-    Object.values(floorTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(5, 5);
-    });
-    Object.values(wallTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(4, 4);
-    });
-  }, [floorTextures, wallTextures]);
+  useTiledTextures(floorTextures, 5, 5);
+  useTiledTextures(wallTextures, 4, 4);
 
   return (
     <group>
@@ -333,18 +297,19 @@ export const Room3 = () => {
       </group>
 
       {/* Painting 1: postrom_mcp (next to payphone) */}
-      <group position={[-8.78, 2.4, 3.2]} rotation={[0, Math.PI / 2, 0]}>
-        {/* Frame */}
-        <mesh castShadow>
-          <boxGeometry args={[1.8, 1.2, 0.08]} />
-          <meshStandardMaterial color="#2b1d0c" roughness={0.7} />
-        </mesh>
-        {/* Canvas */}
-        <mesh position={[0, 0, 0.041]} castShadow>
-          <planeGeometry args={[1.7, 1.1]} />
-          <meshStandardMaterial map={mcpTexture} roughness={0.2} metalness={0.1} />
-        </mesh>
-      </group>
+      <Painting
+        position={[-8.78, 2.4, 3.2]}
+        rotation={[0, Math.PI / 2, 0]}
+        texture={mcpTexture}
+        width={1.7}
+        height={1.1}
+        frameWidth={1.8}
+        frameHeight={1.2}
+        frameColor="#2b1d0c"
+        frameRoughness={0.7}
+        canvasRoughness={0.2}
+        canvasMetalness={0.1}
+      />
 
       {/* ================= STASJON 2 — MCP-servere (z = -0.5) ================= */}
       <group position={[5.0, 0, -0.5]}>
@@ -363,54 +328,24 @@ export const Room3 = () => {
       </group>
 
       {/* Painting 2: mcp_servers (above Stasjon 2 drawer cabinet) */}
-      <group position={[8.8, 3.2, -0.5]} rotation={[0, -Math.PI / 2, 0]}>
-        {/* Frame */}
-        <mesh castShadow>
-          <boxGeometry args={[3.2, 2.2, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        {/* Canvas */}
-        <mesh position={[0, 0, 0.045]} castShadow>
-          <planeGeometry args={[3.0, 2.0]} />
-          <meshStandardMaterial map={mcpServersTexture} roughness={0.3} />
-        </mesh>
-      </group>
-
-      {/* Lamp over mcp_servers painting */}
-      <mesh position={[8.8, 4.6, -0.5]}>
-        <boxGeometry args={[0.4, 0.05, 0.05]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <mesh position={[8.6, 4.55, -0.5]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <pointLight position={[8.6, 4.4, -0.5]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+      <Painting
+        position={[8.8, 3.2, -0.5]}
+        rotation={[0, -Math.PI / 2, 0]}
+        texture={mcpServersTexture}
+        width={3.0}
+        height={2.0}
+        lamp
+      />
 
       {/* Painting 3: postrom_browser_steering (next to Stasjon 3 table) */}
-      <group position={[8.8, 3.2, 5.0]} rotation={[0, -Math.PI / 2, 0]}>
-        {/* Frame */}
-        <mesh castShadow>
-          <boxGeometry args={[3.2, 2.2, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        {/* Canvas */}
-        <mesh position={[0, 0, 0.045]} castShadow>
-          <planeGeometry args={[3.0, 2.0]} />
-          <meshStandardMaterial map={browserTexture} roughness={0.3} />
-        </mesh>
-      </group>
-
-      {/* Lamp over postrom_browser_steering painting */}
-      <mesh position={[8.8, 4.6, 5.0]}>
-        <boxGeometry args={[0.4, 0.05, 0.05]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <mesh position={[8.6, 4.55, 5.0]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <pointLight position={[8.6, 4.4, 5.0]} intensity={8} color="#fff1dd" distance={5} decay={2} castShadow />
+      <Painting
+        position={[8.8, 3.2, 5.0]}
+        rotation={[0, -Math.PI / 2, 0]}
+        texture={browserTexture}
+        width={3.0}
+        height={2.0}
+        lamp
+      />
 
       {/* ================= STASJON 3 — Claude in Chrome (z = 5.0) ================= */}
       <group position={[-5.0, 0, 5.0]}>

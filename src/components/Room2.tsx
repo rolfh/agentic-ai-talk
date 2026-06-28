@@ -1,41 +1,15 @@
-import { useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useTexture, Html } from "@react-three/drei";
-import * as THREE from "three";
+import { useTexture } from "@react-three/drei";
+import { StationLabel } from "./StationLabel";
+import { Painting } from "./Painting";
+import { useTiledTextures } from "../hooks/useTiledTextures";
 
 import { Model } from "./Model";
 import { AudioZone } from "./AudioZone";
 import { Portal } from "./Portal";
 import { Football } from "./Football";
 
-interface StationLabelProps {
-  position: [number, number, number];
-  number: string | number;
-  label: string;
-}
 
-const StationLabel = ({ position, number, label }: StationLabelProps) => {
-  return (
-    <Html position={[position[0], position[1] + 1.0, position[2]]} center distanceFactor={10}>
-      <div style={{
-        fontFamily: "'Instrument Serif', serif",
-        color: "white",
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
-        minWidth: "300px",
-        padding: "6px 12px",
-        borderRadius: "8px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        textAlign: "center",
-        pointerEvents: "none",
-        userSelect: "none",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
-      }}>
-        <div style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "1.1" }}>{number}</div>
-        <div style={{ fontSize: "11px", marginTop: "2px", letterSpacing: "0.03em" }}>{label}</div>
-      </div>
-    </Html>
-  );
-};
 
 /**
  * KONTORET — lyst, ryddig kontor med dagslys. Tema: «agenten jobber på dine filer».
@@ -59,18 +33,8 @@ export const Room2 = () => {
 
   const daytimeSkyTexture = useTexture("/artwork/daytime_sky.png");
 
-  useMemo(() => {
-    Object.values(floorTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(6, 6);
-    });
-    Object.values(woodTextures).forEach((texture) => {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(6, 6);
-    });
-  }, [floorTextures, woodTextures]);
+  useTiledTextures(floorTextures, 6, 6);
+  useTiledTextures(woodTextures, 6, 6);
 
   const textureOrganizing = useTexture("/artwork/kontor_organizing.png");
   const texturePdfData = useTexture("/artwork/kontor_pdf_data.png");
@@ -188,28 +152,14 @@ export const Room2 = () => {
       </group>
 
       {/* Landscape Painting behind Portal (daytimeSkyTexture) on South Wall */}
-      <group position={[0, 4.5, 8.78]} rotation={[0, Math.PI, 0]}>
-        {/* Frame */}
-        <mesh castShadow>
-          <boxGeometry args={[5.2, 3.7, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        {/* Canvas */}
-        <mesh position={[0, 0, 0.045]} castShadow>
-          <planeGeometry args={[5.0, 3.5]} />
-          <meshStandardMaterial map={daytimeSkyTexture} roughness={0.3} />
-        </mesh>
-      </group>
-      {/* Lamp over landscape painting */}
-      <mesh position={[0, 6.5, 8.6]} rotation={[0, Math.PI, 0]}>
-        <boxGeometry args={[0.6, 0.05, 0.05]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <mesh position={[0, 6.45, 8.6]} rotation={[0, Math.PI, 0]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.1, 16]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
-      <pointLight position={[0, 6.3, 8.6]} intensity={12} color="#fff1dd" distance={8} decay={2} castShadow />
+      <Painting
+        position={[0, 4.5, 8.78]}
+        rotation={[0, Math.PI, 0]}
+        texture={daytimeSkyTexture}
+        width={5.0}
+        height={3.5}
+        lamp={{ intensity: 12, distance: 8 }}
+      />
 
 
 
@@ -261,28 +211,22 @@ export const Room2 = () => {
 
       {/* ---------- Kunstverk ---------- */}
       {/* 1. kontor_organizing.png henges over arkivskapene på Stasjon 2 */}
-      <group position={[-8.8, 2.8, -1.5]} rotation={[0, Math.PI / 2, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[3.2, 2.2, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        <mesh position={[0, 0, 0.045]}>
-          <planeGeometry args={[3.0, 2.0]} />
-          <meshStandardMaterial map={textureOrganizing} roughness={0.3} />
-        </mesh>
-      </group>
+      <Painting
+        position={[-8.8, 2.8, -1.5]}
+        rotation={[0, Math.PI / 2, 0]}
+        texture={textureOrganizing}
+        width={3.0}
+        height={2.0}
+      />
 
       {/* 2. kontor_pdf_data.png henges over Stasjon 3 på platåveggen */}
-      <group position={[8.8, 3.4, 1.5]} rotation={[0, -Math.PI / 2, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[3.2, 2.2, 0.08]} />
-          <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
-        </mesh>
-        <mesh position={[0, 0, 0.045]}>
-          <planeGeometry args={[3.0, 2.0]} />
-          <meshStandardMaterial map={texturePdfData} roughness={0.3} />
-        </mesh>
-      </group>
+      <Painting
+        position={[8.8, 3.4, 1.5]}
+        rotation={[0, -Math.PI / 2, 0]}
+        texture={texturePdfData}
+        width={3.0}
+        height={2.0}
+      />
 
       {/* ===================================================================
           STASJON 1 — hva_kan_agent_gjoere · "På dine filer"
