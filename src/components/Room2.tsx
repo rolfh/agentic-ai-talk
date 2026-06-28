@@ -164,13 +164,13 @@ export const Room2 = () => {
 
 
       {/* Diskré takpunkter som markerer den svingete stien (tilpasset det skrå taket) */}
-      {[
+      {([
         [1.0, -6.0],
         [-1.0, -3.0],
         [1.0, 0.0],
         [-1.0, 3.0],
         [-1.0, 6.0],
-      ].map(([x, z], idx) => {
+      ] as [number, number][]).map(([x, z], idx) => {
         const ceilingY = 8.0 - x / 6;
         const y = ceilingY - 0.7;
         return (

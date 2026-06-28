@@ -202,9 +202,12 @@ export const Portal = ({ position, rotation = [0, 0, 0], room, color = "#3aa0ff"
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    if (flameMatA.current) flameMatA.current.uniforms.uTime.value = t;
-    if (flameMatB.current) flameMatB.current.uniforms.uTime.value = t;
-    if (discMat.current) discMat.current.uniforms.uTime.value = t;
+    const uTimeA = flameMatA.current?.uniforms.uTime;
+    if (uTimeA) uTimeA.value = t;
+    const uTimeB = flameMatB.current?.uniforms.uTime;
+    if (uTimeB) uTimeB.value = t;
+    const uTimeD = discMat.current?.uniforms.uTime;
+    if (uTimeD) uTimeD.value = t;
     if (flickerLight.current) {
       flickerLight.current.intensity = 1.2 + Math.sin(t * 9.0) * 0.2 + Math.sin(t * 23.0) * 0.1;
     }
