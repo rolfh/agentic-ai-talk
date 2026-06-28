@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { KeyboardControls, PointerLockControls, Environment } from "@react-three/drei";
+import { KeyboardControls, PointerLockControls, Environment, Loader } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { EffectComposer, Bloom, BrightnessContrast, HueSaturation } from "@react-three/postprocessing";
 import { Player } from "./components/Player";
@@ -10,6 +10,7 @@ import { Room3 } from "./components/Room3";
 import { Room4 } from "./components/Room4";
 import { useStore } from "./store";
 import { Suspense, useState, useEffect } from "react";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -51,7 +52,17 @@ export default function App() {
   const setRoom = useStore((state) => state.setRoom);
   const subtitle = useStore((state) => state.subtitle);
   const [showHint, setShowHint] = useState(true);
-  const [dpr, setDpr] = useState(1);
+  const [dpr] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const resVal = params.get("res");
+      if (resVal !== null && !isNaN(Number(resVal))) {
+        return window.devicePixelRatio * Number(resVal);
+      }
+      return window.devicePixelRatio;
+    }
+    return 1;
+  });
 
   const viewParam = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("view") : null;
   const isSpectating = viewParam !== null;
@@ -59,7 +70,6 @@ export default function App() {
 
   // Force title on mount to override browser caching of old title
   useEffect(() => {
-    document.title = "Agentic AI talk";
     const timer = setTimeout(() => setShowHint(false), 5000);
     return () => clearTimeout(timer);
   }, []);
@@ -74,18 +84,7 @@ export default function App() {
     }
   }, [isSpectating, viewIndex, setRoom]);
 
-  // Read resolution query parameter (res) on mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const resVal = params.get("res");
-      if (resVal !== null && !isNaN(Number(resVal))) {
-        setDpr(window.devicePixelRatio * Number(resVal));
-      } else {
-        setDpr(window.devicePixelRatio);
-      }
-    }
-  }, []);
+
 
   // Teleport keyboard listener (Ctrl/Cmd + 1..5)
   useEffect(() => {
@@ -115,9 +114,10 @@ export default function App() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-1.5 h-1.5 rounded-full bg-white/70 pointer-events-none mix-blend-difference" />
 
       {/* 3D Canvas */}
-      <KeyboardControls map={keyboardMap}>
-        <Canvas shadows gl={{ toneMappingExposure: 0.85 }} camera={{ fov: 75, position: [0, 2, 5] }} dpr={dpr}>
-          <Suspense fallback={null}>
+      <ErrorBoundary>
+        <KeyboardControls map={keyboardMap}>
+          <Canvas shadows gl={{ toneMappingExposure: 0.85 }} camera={{ fov: 75, position: [0, 2, 5] }} dpr={dpr}>
+            <Suspense fallback={null}>
             <Environment 
               files="/hdri/evening_field_1k.exr" 
               background 
@@ -139,20 +139,24 @@ export default function App() {
               {currentRoom === "room4" && <Room4 />}
             </Physics>
 
-            {/* Postprocessing effects */}
-            <EffectComposer enableNormalPass={false}>
-              <Bloom luminanceThreshold={1.0} mipmapBlur intensity={0.25} />
-              <BrightnessContrast contrast={0.12} brightness={0.02} />
-              <HueSaturation saturation={0.08} />
-            </EffectComposer>
-          </Suspense>
-        </Canvas>
-      </KeyboardControls>
+              {/* Postprocessing effects */}
+              <EffectComposer enableNormalPass={false}>
+                <Bloom luminanceThreshold={1.0} mipmapBlur intensity={0.25} />
+                <BrightnessContrast contrast={0.12} brightness={0.02} />
+                <HueSaturation saturation={0.08} />
+              </EffectComposer>
+            </Suspense>
+          </Canvas>
+        </KeyboardControls>
+      </ErrorBoundary>
+      <Loader />
       
       {/* Subtitles HUD Overlay */}
       {subtitle && (
         <div 
           className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40 max-w-2xl text-center px-5 py-2.5 bg-black/20 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl pointer-events-none transition-all duration-200"
+          role="status"
+          aria-live="polite"
           style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           <p className="text-base md:text-lg text-white tracking-wide leading-relaxed">

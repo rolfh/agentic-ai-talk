@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 import { useRef, useEffect, useState, useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import type { IntersectionEnterPayload, IntersectionExitPayload } from "@react-three/rapier";
