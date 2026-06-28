@@ -228,16 +228,16 @@ export const Outside = () => {
       </RigidBody>
 
       {/* ---------- 10 Footballs Scattered Outdoors ---------- */}
-      <Football position={[-6.5, 0.5, 25.0]} />
-      <Football position={[-4.83, 0.5, 25.0]} />
-      <Football position={[-3.17, 0.5, 25.0]} />
-      <Football position={[-1.5, 0.5, 25.0]} />
-      <Football position={[0.17, 0.5, 25.0]} />
-      <Football position={[1.83, 0.5, 25.0]} />
-      <Football position={[3.5, 0.5, 25.0]} />
-      <Football position={[5.17, 0.5, 25.0]} />
-      <Football position={[6.83, 0.5, 25.0]} />
-      <Football position={[8.5, 0.5, 25.0]} />
+      <Football position={[-6.5, 0.5, 35.0]} />
+      <Football position={[-4.83, 0.5, 35.0]} />
+      <Football position={[-3.17, 0.5, 35.0]} />
+      <Football position={[-1.5, 0.5, 35.0]} />
+      <Football position={[0.17, 0.5, 35.0]} />
+      <Football position={[1.83, 0.5, 35.0]} />
+      <Football position={[3.5, 0.5, 35.0]} />
+      <Football position={[5.17, 0.5, 35.0]} />
+      <Football position={[6.83, 0.5, 35.0]} />
+      <Football position={[8.5, 0.5, 35.0]} />
 
       {/* ---------- Trees ---------- */}
       {/* Trees along the path */}
@@ -299,29 +299,29 @@ export const Outside = () => {
       <Portal position={[0, 1.32, 6.05]} rotation={[0, 0, 0]} room="lobby" label="Inn i stua" color="#3aa0ff" />
 
       {/* ---------- Soccer Goals ---------- */}
-      <SoccerGoal position={[-10.8, 0.0, 25.0]} rotation={[0, 0, 0]} scale={0.0045} />
-      <SoccerGoal position={[12.4, 0.0, 25.0]} rotation={[0, Math.PI, 0]} scale={0.0045} />
+      <SoccerGoal position={[-10.8, 0.0, 35.0]} rotation={[0, 0, 0]} scale={0.0045} />
+      <SoccerGoal position={[12.4, 0.0, 35.0]} rotation={[0, Math.PI, 0]} scale={0.0045} />
 
       {/* ---------- Soccer Field Barriers (Hip-Height Walls) ---------- */}
       {/* South Wall */}
-      <Barrier position={[0.8, 0.0, 30.0]} size={[24.0, 1.0, 0.2]} />
+      <Barrier position={[0.8, 0.0, 40.0]} size={[24.0, 1.0, 0.2]} />
       {/* West Wall */}
-      <Barrier position={[-11.2, 0.0, 25.0]} size={[10.0, 1.0, 0.2]} rotation={[0, Math.PI / 2, 0]} />
+      <Barrier position={[-11.2, 0.0, 35.0]} size={[10.0, 1.0, 0.2]} rotation={[0, Math.PI / 2, 0]} />
       {/* East Wall */}
-      <Barrier position={[12.8, 0.0, 25.0]} size={[10.0, 1.0, 0.2]} rotation={[0, Math.PI / 2, 0]} />
+      <Barrier position={[12.8, 0.0, 35.0]} size={[10.0, 1.0, 0.2]} rotation={[0, Math.PI / 2, 0]} />
       {/* North Wall - Split with 3m entrance gate in the middle */}
-      <Barrier position={[-5.95, 0.0, 20.0]} size={[10.5, 1.0, 0.2]} />
-      <Barrier position={[7.55, 0.0, 20.0]} size={[10.5, 1.0, 0.2]} />
+      <Barrier position={[-5.95, 0.0, 30.0]} size={[10.5, 1.0, 0.2]} />
+      <Barrier position={[7.55, 0.0, 30.0]} size={[10.5, 1.0, 0.2]} />
 
       {/* ---------- Station 1: Velkommen (utendørs fotballbane) ---------- */}
       <AudioZone
-        position={[0.8, 1.0, 25.0]}
+        position={[0.8, 1.0, 35.0]}
         size={[24, 4, 10]}
         audioUrl="/tts/stua_intro.mp3"
         subtitleUrl="/tts/stua_intro.json"
       />
       {/* Station 1 billboarded text */}
-      <StationLabel position={[0.8, 3.5, 25.0]} label="Velkommen" />
+      <StationLabel position={[0.8, 3.5, 35.0]} label="Velkommen" />
 
       {/* ---------- Lights ---------- */}
       <ambientLight intensity={0.02} color="#1a1c2e" />
