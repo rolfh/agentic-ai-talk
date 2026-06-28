@@ -38,6 +38,7 @@ export const Room3 = () => {
   const browserTexture = useTexture("/artwork/postrom_browser_steering.png");
   const mcpServersTexture = useTexture("/artwork/mcp_servers.jpg");
   const agentDataCloudTexture = useTexture("/artwork/agent_data_cloud.jpg");
+  const robotsInsideComputerTexture = useTexture("/artwork/robots_inside_computer.jpg");
 
   useTiledTextures(floorTextures, 5, 5);
   useTiledTextures(wallTextures, 4, 4);
@@ -408,6 +409,16 @@ export const Room3 = () => {
         castShadow
       />
 
+      {/* Painting 5: robots_inside_computer (on North brick wall behind Station 3) */}
+      <Painting
+        position={[-3.5, 5.0, -8.78]}
+        rotation={[0, 0, 0]}
+        texture={robotsInsideComputerTexture}
+        width={6.0}
+        height={4.0}
+        lamp={{ intensity: 15, distance: 10 }}
+      />
+
       {/* ================= STASJON 3 — Claude in Chrome (z = 5.0) ================= */}
       <group position={[-5.0, 0, 5.0]}>
         {/* Rundt bord med laptop = nettleseren */}
@@ -491,3 +502,4 @@ useTexture.preload("/textures/brick_floor_003/nor.jpg");
 useTexture.preload("/textures/brick_floor_003/rough.jpg");
 useTexture.preload("/artwork/sunny_courtyard.png");
 useTexture.preload("/artwork/agent_data_cloud.jpg");
+useTexture.preload("/artwork/robots_inside_computer.jpg");
