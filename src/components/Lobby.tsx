@@ -67,7 +67,7 @@ export const Lobby = () => {
 
       {/* Tak (18x18) — Hevet til 9m */}
       <RigidBody type="fixed" position={[0, 9.1, 0]}>
-        <mesh receiveShadow>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[18, 0.2, 18]} />
           <meshStandardMaterial color="#cdbfa6" roughness={1} />
         </mesh>

@@ -83,25 +83,25 @@ export const Room4 = () => {
 
       {/* Delte takplater for å lage åpning til glass-skylight (4x4 åpning i midten) */}
       <RigidBody type="fixed" position={[0, 8.0, -5.5]}>
-        <mesh receiveShadow>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[18, 0.2, 7.0]} />
           <meshStandardMaterial color="#c9b89c" roughness={1} metalness={0} />
         </mesh>
       </RigidBody>
       <RigidBody type="fixed" position={[0, 8.0, 5.5]}>
-        <mesh receiveShadow>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[18, 0.2, 7.0]} />
           <meshStandardMaterial color="#c9b89c" roughness={1} metalness={0} />
         </mesh>
       </RigidBody>
       <RigidBody type="fixed" position={[-5.5, 8.0, 0]}>
-        <mesh receiveShadow>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[7.0, 0.2, 4.0]} />
           <meshStandardMaterial color="#c9b89c" roughness={1} metalness={0} />
         </mesh>
       </RigidBody>
       <RigidBody type="fixed" position={[5.5, 8.0, 0]}>
-        <mesh receiveShadow>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[7.0, 0.2, 4.0]} />
           <meshStandardMaterial color="#c9b89c" roughness={1} metalness={0} />
         </mesh>

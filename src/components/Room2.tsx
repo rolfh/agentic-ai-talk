@@ -54,7 +54,7 @@ export const Room2 = () => {
       <group position={[0, 8.0, 0]} rotation={[0, 0, -Math.atan(3 / 18)]}>
         {/* Vestlig solid del av taket */}
         <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow position={[-8, 0, 0]}>
+          <mesh receiveShadow castShadow position={[-8, 0, 0]}>
             <boxGeometry args={[2, 0.2, 18]} />
             <meshStandardMaterial {...woodTextures} color="#c8a877" />
           </mesh>
@@ -62,7 +62,7 @@ export const Room2 = () => {
 
         {/* Østlig solid del av taket */}
         <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow position={[2, 0, 0]}>
+          <mesh receiveShadow castShadow position={[2, 0, 0]}>
             <boxGeometry args={[14, 0.2, 18]} />
             <meshStandardMaterial {...woodTextures} color="#c8a877" />
           </mesh>
@@ -70,13 +70,13 @@ export const Room2 = () => {
 
         {/* Nord/Sør-rammer rundt takvinduet */}
         <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow position={[-6, 0, -8]}>
+          <mesh receiveShadow castShadow position={[-6, 0, -8]}>
             <boxGeometry args={[2, 0.2, 2]} />
             <meshStandardMaterial {...woodTextures} color="#c8a877" />
           </mesh>
         </RigidBody>
         <RigidBody type="fixed" colliders="cuboid">
-          <mesh receiveShadow position={[-6, 0, 8]}>
+          <mesh receiveShadow castShadow position={[-6, 0, 8]}>
             <boxGeometry args={[2, 0.2, 2]} />
             <meshStandardMaterial {...woodTextures} color="#c8a877" />
           </mesh>

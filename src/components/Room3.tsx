@@ -54,7 +54,7 @@ export const Room3 = () => {
 
       {/* Tak */}
       <RigidBody type="fixed" position={[0, 12.1, 0]}>
-        <mesh receiveShadow>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[20, 0.2, 20]} />
           <meshStandardMaterial color="#181614" roughness={1} />
         </mesh>
@@ -152,7 +152,7 @@ export const Room3 = () => {
         </mesh>
       </RigidBody>
       <RigidBody type="fixed" position={[9.75, 11.9, 3.0]}>
-        <mesh>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[1.5, 0.2, 4.0]} />
           <meshStandardMaterial color="#181614" roughness={1} />
         </mesh>
