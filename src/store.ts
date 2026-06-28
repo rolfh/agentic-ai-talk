@@ -5,8 +5,8 @@ interface AppState {
   setRoom: (room: AppState['currentRoom']) => void;
   subtitle: string | null;
   setSubtitle: (subtitle: string | null) => void;
-  activeAudio: HTMLAudioElement | null;
-  setActiveAudio: (audio: HTMLAudioElement | null) => void;
+  activeAudioId: string | null;
+  setActiveAudioId: (id: string | null) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -14,7 +14,7 @@ export const useStore = create<AppState>((set) => ({
   setRoom: (room) => set({ currentRoom: room }),
   subtitle: null,
   setSubtitle: (subtitle) => set({ subtitle }),
-  activeAudio: null,
-  setActiveAudio: (activeAudio) => set({ activeAudio }),
+  activeAudioId: null,
+  setActiveAudioId: (activeAudioId) => set({ activeAudioId }),
 }));
 

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import type { IntersectionEnterPayload, IntersectionExitPayload } from "@react-three/rapier";
 import { useStore } from "../store";
@@ -39,14 +39,17 @@ interface AudioZoneProps {
   subtitleUrl: string;
 }
 
+let activeAudioElement: HTMLAudioElement | null = null;
+
 export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZoneProps) => {
   const setSubtitle = useStore((state) => state.setSubtitle);
-  const activeAudio = useStore((state) => state.activeAudio);
-  const setActiveAudio = useStore((state) => state.setActiveAudio);
+  const activeAudioId = useStore((state) => state.activeAudioId);
+  const setActiveAudioId = useStore((state) => state.setActiveAudioId);
 
-  const [subtitles, setSubtitles] = useState<SubtitleSegment[]>([]);
+  const subtitlesRef = useRef<SubtitleSegment[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<number | null>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
 
   const glowUniforms = useMemo(
     () => ({
@@ -57,10 +60,16 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
   );
 
   useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    glowUniforms.uTime.value = t;
-    const isActive = activeAudio && activeAudio === audioRef.current;
-    glowUniforms.uActive.value = THREE.MathUtils.lerp(glowUniforms.uActive.value, isActive ? 1.0 : 0.0, 0.1);
+    if (materialRef.current) {
+      const t = state.clock.elapsedTime;
+      materialRef.current.uniforms.uTime.value = t;
+      const isActive = activeAudioId === audioUrl;
+      materialRef.current.uniforms.uActive.value = THREE.MathUtils.lerp(
+        materialRef.current.uniforms.uActive.value,
+        isActive ? 1.0 : 0.0,
+        0.1
+      );
+    }
   });
 
   // Load subtitles JSON
@@ -70,7 +79,9 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
         if (!res.ok) throw new Error(`Subtitles not found at ${subtitleUrl}`);
         return res.json();
       })
-      .then((data) => setSubtitles(data))
+      .then((data) => {
+        subtitlesRef.current = data;
+      })
       .catch((err) => console.error("Error loading subtitles for", audioUrl, err));
   }, [subtitleUrl, audioUrl]);
 
@@ -79,19 +90,28 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.src = "";
+        if (activeAudioElement === audioRef.current) {
+          activeAudioElement = null;
+        }
         audioRef.current = null;
+      }
+      const currentActiveId = useStore.getState().activeAudioId;
+      if (currentActiveId === audioUrl) {
+        useStore.getState().setActiveAudioId(null);
+        useStore.getState().setSubtitle(null);
       }
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
-  }, []);
+  }, [audioUrl]);
 
   const handleEnter = () => {
     // 1. If another audio is playing, stop it
-    if (activeAudio && activeAudio !== audioRef.current) {
-      activeAudio.pause();
-      activeAudio.currentTime = 0;
+    if (activeAudioElement && activeAudioElement !== audioRef.current) {
+      activeAudioElement.pause();
+      activeAudioElement.currentTime = 0;
     }
 
     // 2. Create audio if it doesn't exist
@@ -101,7 +121,10 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
       // When audio finishes, clear subtitles
       audioRef.current.addEventListener("ended", () => {
         setSubtitle(null);
-        setActiveAudio(null);
+        setActiveAudioId(null);
+        if (activeAudioElement === audioRef.current) {
+          activeAudioElement = null;
+        }
         if (timerRef.current) {
           clearInterval(timerRef.current);
           timerRef.current = null;
@@ -114,7 +137,8 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
     audioRef.current.play().catch(err => {
       console.warn("Audio playback was blocked or deferred by browser autoplay policies:", err);
     });
-    setActiveAudio(audioRef.current);
+    activeAudioElement = audioRef.current;
+    setActiveAudioId(audioUrl);
 
     // 4. Start subtitle tracking timer (polls every 100ms)
     if (timerRef.current) clearInterval(timerRef.current);
@@ -124,7 +148,7 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
       const time = audioRef.current.currentTime;
       
       // Find matching segment based on current timestamp
-      const segment = subtitles.find(
+      const segment = subtitlesRef.current.find(
         (s) => time >= s.start && time <= s.end
       );
       
@@ -141,8 +165,11 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
     if (audioRef.current) {
       audioRef.current.pause();
       setSubtitle(null);
-      if (activeAudio === audioRef.current) {
-        setActiveAudio(null);
+      if (activeAudioElement === audioRef.current) {
+        activeAudioElement = null;
+      }
+      if (activeAudioId === audioUrl) {
+        setActiveAudioId(null);
       }
     }
     if (timerRef.current) {
@@ -184,6 +211,7 @@ export const AudioZone = ({ position, size, audioUrl, subtitleUrl }: AudioZonePr
       <mesh position={[position[0], 0.6, position[2]]}>
         <cylinderGeometry args={[0.08, 0.25, 1.2, 16, 1, true]} />
         <shaderMaterial
+          ref={materialRef}
           vertexShader={glowVert}
           fragmentShader={glowFrag}
           uniforms={glowUniforms}

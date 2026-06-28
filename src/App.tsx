@@ -51,7 +51,19 @@ export default function App() {
   const setRoom = useStore((state) => state.setRoom);
   const subtitle = useStore((state) => state.subtitle);
   const [showHint, setShowHint] = useState(true);
-  const [dpr, setDpr] = useState(1);
+  const [dpr] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const resVal = params.get("res");
+      const baseDpr = window.devicePixelRatio || 1;
+      if (resVal !== null && !isNaN(Number(resVal))) {
+        const val = baseDpr * Number(resVal);
+        return Math.min(val, 2 * baseDpr);
+      }
+      return Math.min(baseDpr, 2);
+    }
+    return 1;
+  });
 
   const viewParam = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("view") : null;
   const isSpectating = viewParam !== null;
@@ -74,18 +86,7 @@ export default function App() {
     }
   }, [isSpectating, viewIndex, setRoom]);
 
-  // Read resolution query parameter (res) on mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const resVal = params.get("res");
-      if (resVal !== null && !isNaN(Number(resVal))) {
-        setDpr(window.devicePixelRatio * Number(resVal));
-      } else {
-        setDpr(window.devicePixelRatio);
-      }
-    }
-  }, []);
+
 
   // Teleport keyboard listener (Ctrl/Cmd + 1..5)
   useEffect(() => {

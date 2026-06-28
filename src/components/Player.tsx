@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
-import { RigidBody, CapsuleCollider, CuboidCollider, RapierRigidBody } from "@react-three/rapier";
+import { RigidBody, CapsuleCollider, CuboidCollider, RapierRigidBody, useRapier } from "@react-three/rapier";
 import * as THREE from "three";
 import { useStore } from "../store";
 
@@ -15,6 +15,7 @@ export const Player = () => {
   const [, getKeys] = useKeyboardControls();
   const currentRoom = useStore((state) => state.currentRoom);
   const speedFactor = useRef(0);
+  const { rapier, world } = useRapier();
 
   // Teleport player to a safe position inside the room upon room transitions
   useEffect(() => {
@@ -76,7 +77,21 @@ export const Player = () => {
       .applyEuler(state.camera.rotation);
     
     let nextVelY = velocity.y;
-    if (jump && Math.abs(velocity.y) < 0.05) {
+    const ray = new rapier.Ray(pos, { x: 0, y: -1, z: 0 });
+    const maxToi = 1.15; // capsule half-height (0.5) + radius (0.5) + small buffer (0.15)
+    const hit = world.castRay(
+      ray,
+      maxToi,
+      true,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      (collider) => collider.parent() !== rigidBody.current
+    );
+    const isGrounded = hit !== null;
+
+    if (jump && isGrounded) {
       nextVelY = 7;
     }
     
