@@ -385,14 +385,27 @@ export const Room3 = () => {
         lamp
       />
 
-      {/* Painting 4: agent_data_cloud (on North brick wall behind Station 3) */}
+      {/* Painting 4: agent_data_cloud (on South brick wall, opposite the entrance) */}
       <Painting
-        position={[-3.5, 5.0, -8.78]}
-        rotation={[0, 0, 0]}
+        position={[0, 5.0, 8.78]}
+        rotation={[0, Math.PI, 0]}
         texture={agentDataCloudTexture}
-        width={6.0}
-        height={4.0}
-        lamp={{ intensity: 12, distance: 8 }}
+        width={12.0}
+        height={8.0}
+        lamp={{ intensity: 35, distance: 20 }}
+      />
+
+      {/* Spotlight shining on the giant painting on the South wall */}
+      <spotLight
+        position={[0, 10.0, 3.0]}
+        target-position={[0, 5.0, 9.0]}
+        angle={0.85}
+        penumbra={0.6}
+        intensity={60}
+        color="#ffe3c0"
+        distance={15}
+        decay={1.8}
+        castShadow
       />
 
       {/* ================= STASJON 3 — Claude in Chrome (z = 5.0) ================= */}
