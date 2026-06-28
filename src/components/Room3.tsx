@@ -76,13 +76,50 @@ export const Room3 = () => {
         </mesh>
       </RigidBody>
 
-      {/* Vestvegg (x = -9) — stasjonsvegg */}
-      <RigidBody type="fixed" position={[-9, 6.0, 0]}>
+      {/* Vestvegg (x = -9) — stasjonsvegg (delt i solid del for stasjon 1 og vindusdel) */}
+      {/* Sørlig solid del: Z fra 1.0 til 9.0 */}
+      <RigidBody type="fixed" position={[-9, 6.0, 5.0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 12, 18]} />
+          <boxGeometry args={[0.4, 12.0, 8.0]} />
           <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
         </mesh>
       </RigidBody>
+
+      {/* Nordlig vindusdel: Z fra -9.0 til 1.0 */}
+      {/* Veggdel under vinduet */}
+      <RigidBody type="fixed" position={[-9, 0.6, -4.0]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[0.4, 1.2, 10.0]} />
+          <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
+        </mesh>
+      </RigidBody>
+      {/* Veggdel over vinduet */}
+      <RigidBody type="fixed" position={[-9, 8.5, -4.0]}>
+        <mesh receiveShadow castShadow>
+          <boxGeometry args={[0.4, 7.0, 10.0]} />
+          <meshStandardMaterial {...wallTextures} color="#d9cbb2" />
+        </mesh>
+      </RigidBody>
+      {/* Glass */}
+      <RigidBody type="fixed" position={[-9, 3.1, -4.0]}>
+        <mesh>
+          <boxGeometry args={[0.1, 3.8, 10.0]} />
+          <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.6} transparent roughness={0.05} />
+        </mesh>
+      </RigidBody>
+      {/* Vindussprosser / Poster */}
+      <mesh position={[-9.0, 3.1, -7.0]}>
+        <boxGeometry args={[0.12, 3.8, 0.12]} />
+        <meshStandardMaterial color="#5b4a36" roughness={0.7} />
+      </mesh>
+      <mesh position={[-9.0, 3.1, -4.0]}>
+        <boxGeometry args={[0.12, 3.8, 0.12]} />
+        <meshStandardMaterial color="#5b4a36" roughness={0.7} />
+      </mesh>
+      <mesh position={[-9.0, 3.1, -1.0]}>
+        <boxGeometry args={[0.12, 3.8, 0.12]} />
+        <meshStandardMaterial color="#5b4a36" roughness={0.7} />
+      </mesh>
 
       {/* ---------------- L-shape Inner Partition Walls ---------------- */}
       {/* Partition wall blocking northeast quadrant: Z from -9 to -2 at X = 2.0 */}

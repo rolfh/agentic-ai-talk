@@ -185,28 +185,76 @@ export const Room4 = () => {
       </RigidBody>
 
       {/* ---------- Diagonal Corner Walls for Octagon ---------- */}
+      {/* ---------- Diagonal Corner Window Walls for Octagon ---------- */}
       <RigidBody type="fixed" position={[6.75, 4.0, -6.75]} rotation={[0, Math.PI / 4, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 8.0, 6.36]} />
+        {/* Bottom wall */}
+        <mesh receiveShadow castShadow position={[0, -3.25, 0]}>
+          <boxGeometry args={[0.4, 1.5, 6.36]} />
           <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
         </mesh>
+        {/* Top wall */}
+        <mesh receiveShadow castShadow position={[0, 2.75, 0]}>
+          <boxGeometry args={[0.4, 2.5, 6.36]} />
+          <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
+        </mesh>
+        {/* Glass */}
+        <mesh position={[0, -0.5, 0]}>
+          <boxGeometry args={[0.1, 4.0, 6.36]} />
+          <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.6} transparent roughness={0.05} />
+        </mesh>
       </RigidBody>
+
       <RigidBody type="fixed" position={[-6.75, 4.0, -6.75]} rotation={[0, -Math.PI / 4, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 8.0, 6.36]} />
+        {/* Bottom wall */}
+        <mesh receiveShadow castShadow position={[0, -3.25, 0]}>
+          <boxGeometry args={[0.4, 1.5, 6.36]} />
           <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
         </mesh>
+        {/* Top wall */}
+        <mesh receiveShadow castShadow position={[0, 2.75, 0]}>
+          <boxGeometry args={[0.4, 2.5, 6.36]} />
+          <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
+        </mesh>
+        {/* Glass */}
+        <mesh position={[0, -0.5, 0]}>
+          <boxGeometry args={[0.1, 4.0, 6.36]} />
+          <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.6} transparent roughness={0.05} />
+        </mesh>
       </RigidBody>
+
       <RigidBody type="fixed" position={[6.75, 4.0, 6.75]} rotation={[0, -Math.PI / 4, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 8.0, 6.36]} />
+        {/* Bottom wall */}
+        <mesh receiveShadow castShadow position={[0, -3.25, 0]}>
+          <boxGeometry args={[0.4, 1.5, 6.36]} />
           <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
         </mesh>
-      </RigidBody>
-      <RigidBody type="fixed" position={[-6.75, 4.0, 6.75]} rotation={[0, Math.PI / 4, 0]}>
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[0.4, 8.0, 6.36]} />
+        {/* Top wall */}
+        <mesh receiveShadow castShadow position={[0, 2.75, 0]}>
+          <boxGeometry args={[0.4, 2.5, 6.36]} />
           <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
+        </mesh>
+        {/* Glass */}
+        <mesh position={[0, -0.5, 0]}>
+          <boxGeometry args={[0.1, 4.0, 6.36]} />
+          <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.6} transparent roughness={0.05} />
+        </mesh>
+      </RigidBody>
+
+      <RigidBody type="fixed" position={[-6.75, 4.0, 6.75]} rotation={[0, Math.PI / 4, 0]}>
+        {/* Bottom wall */}
+        <mesh receiveShadow castShadow position={[0, -3.25, 0]}>
+          <boxGeometry args={[0.4, 1.5, 6.36]} />
+          <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
+        </mesh>
+        {/* Top wall */}
+        <mesh receiveShadow castShadow position={[0, 2.75, 0]}>
+          <boxGeometry args={[0.4, 2.5, 6.36]} />
+          <meshStandardMaterial color="#cdb497" roughness={0.95} metalness={0} />
+        </mesh>
+        {/* Glass */}
+        <mesh position={[0, -0.5, 0]}>
+          <boxGeometry args={[0.1, 4.0, 6.36]} />
+          <meshPhysicalMaterial color="#eaf6ff" transmission={0.9} opacity={0.6} transparent roughness={0.05} />
         </mesh>
       </RigidBody>
 
